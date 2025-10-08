@@ -18,7 +18,7 @@ O objetivo é demonstrar **proficiência em arquitetura hexagonal**, **boas prá
 
 ## 🧱 Tecnologias e Conceitos Aplicados
 
-- **Backend:** Quarkus (CDI, JAX-RS, Hibernate ORM, Flyway, RabbitMQ — *avaliação de uso*)  
+- **Backend:** Quarkus (jdk-17, CDI, JAX-RS, Hibernate ORM, Flyway, Lombok, RabbitMQ — *avaliação de uso*)  
 - **Frontend:** Angular 15+ (Standalone Components, Nginx containerizado)  
 - **Segurança:** Keycloak (OpenID Connect / RBAC)  
 - **Banco de Dados:** PostgreSQL  
