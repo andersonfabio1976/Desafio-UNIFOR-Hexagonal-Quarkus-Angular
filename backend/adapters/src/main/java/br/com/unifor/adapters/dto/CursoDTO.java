@@ -1,7 +1,16 @@
 package br.com.unifor.adapters.dto;
 
+import br.com.unifor.domain.model.Disciplina;
+import br.com.unifor.domain.model.Semestre;
+import java.time.Instant;
+import java.util.List;
+
 public record CursoDTO(
-        Long id,
+        Long identifier,
         String nome,
-        String descricao
+        List<Disciplina> disciplinas,
+        List<Semestre> semestres,
+        Instant createdOn,
+        Instant updatedOn
+
 ) {}

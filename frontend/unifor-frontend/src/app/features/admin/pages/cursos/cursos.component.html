@@ -1,0 +1,49 @@
+<mat-toolbar color="primary" class="page-toolbar">
+  <mat-icon>book</mat-icon>
+  <span>Gerenciamento de Cursos</span>
+</mat-toolbar>
+
+<div class="page-container">
+  <mat-card class="mat-elevation-z4">
+    <mat-card-title>Cadastro de Curso</mat-card-title>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-container">
+      <mat-form-field>
+        <mat-label>Nome do Curso</mat-label>
+        <input matInput formControlName="nome" required />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">
+        <mat-icon>save</mat-icon> Salvar
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z4">
+    <mat-card-title>Lista de Cursos</mat-card-title>
+
+    <table mat-table [dataSource]="cursos" class="mat-elevation-z2 full-width-table">
+      <ng-container matColumnDef="identifier">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let curso">{{ curso.identifier }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let curso">{{ curso.nome }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let curso">
+          <button mat-icon-button color="warn" (click)="excluir(curso.identifier!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card>
+</div>

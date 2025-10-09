@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,8 @@ import java.util.List;
 public class Curso {
     private Long identifier;
     private String nome;
-    private String codigo;
+    private Instant createdOn;
+    private Instant updatedOn;
 
     @Builder.Default
     private List<Semestre> semestres = new ArrayList<>();

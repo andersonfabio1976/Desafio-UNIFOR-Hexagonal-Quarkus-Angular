@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @ToString
@@ -12,6 +14,9 @@ import lombok.ToString;
 public class Disciplina {
     private Long identifier;
     private String nome;
-    private String codigo;
     private Professor professor;
+    private Curso curso;
+    private Semestre semestre;
+    private Instant createdOn;
+    private Instant updatedOn;
 }

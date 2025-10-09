@@ -12,4 +12,5 @@ public interface SemestreMapper {
     SemestreEntity toEntity(Semestre domain);
     SemestreDTO toDTO(Semestre domain);
     List<SemestreDTO> toDTO(List<Semestre> domain);
+    Semestre toDomain(SemestreDTO dto);
 }
