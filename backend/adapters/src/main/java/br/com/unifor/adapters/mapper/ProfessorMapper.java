@@ -12,4 +12,5 @@ public interface ProfessorMapper {
     ProfessorEntity toEntity(Professor domain);
     ProfessorDTO toDTO(Professor domain);
     List<ProfessorDTO> toDTO(List<Professor> domain);
+    Professor toDomain(ProfessorDTO dto);
 }

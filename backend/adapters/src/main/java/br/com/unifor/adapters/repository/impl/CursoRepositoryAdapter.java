@@ -4,39 +4,18 @@ import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.adapters.repository.entity.CursoEntity;
 import br.com.unifor.application.port.repository.CursoRepositoryPort;
 import br.com.unifor.domain.model.Curso;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Optional;
+import lombok.NoArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-public class CursoRepositoryAdapter implements CursoRepositoryPort, PanacheRepository<CursoEntity> {
+public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, Curso>
+        implements CursoRepositoryPort {
 
     private final CursoMapper mapper;
 
-    @Override
-    public Optional<Curso> buscarPorId(Long id) {
-        return findByIdOptional(id).map(mapper::toDomain);
-    }
-
-    @Override
-    public List<Curso> listarTodos() {
-        return listAll().stream().map(mapper::toDomain).toList();
-    }
-
-    @Override
-    @Transactional
-    public void salvar(Curso curso) {
-        persist(mapper.toEntity(curso));
-    }
-
-    @Override
-    @Transactional
-    public boolean excluirPorId(Long id) {
-        return deleteById(id);
+    @jakarta.inject.Inject
+    public CursoRepositoryAdapter(CursoMapper mapper) {
+        super(mapper::toDomain, mapper::toEntity);
+        this.mapper = mapper;
     }
 }

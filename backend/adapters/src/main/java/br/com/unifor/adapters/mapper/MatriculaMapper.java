@@ -13,4 +13,5 @@ public interface MatriculaMapper  {
     MatriculaEntity toEntity(Matricula domain);
     MatriculaDTO toDTO(Matricula domain);
     List<MatriculaDTO> toDTO(List<Matricula> domain);
+    Matricula toDomain(MatriculaDTO dto);
 }

@@ -13,4 +13,5 @@ public interface CursoMapper {
     CursoEntity toEntity(Curso domain);
     CursoDTO toDTO(Curso domain);
     List<CursoDTO> toDTO(List<Curso> domain);
+    Curso toDomain(CursoDTO dto);
 }

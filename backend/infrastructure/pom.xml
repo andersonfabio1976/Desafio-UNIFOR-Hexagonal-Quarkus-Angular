@@ -13,19 +13,6 @@
     <artifactId>infrastructure</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>br.com.unifor.core</groupId>
-            <artifactId>domain</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm-panache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
-        </dependency>
     </dependencies>
 
     <properties>
