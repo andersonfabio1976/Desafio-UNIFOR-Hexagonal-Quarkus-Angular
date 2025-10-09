@@ -12,4 +12,5 @@ public interface DisciplinaMapper {
     DisciplinaEntity toEntity(Disciplina domain);
     DisciplinaDTO toDTO(Disciplina domain);
     List<DisciplinaDTO> toDTO(List<Disciplina> domain);
+    Disciplina toDomain(DisciplinaDTO dto);
 }

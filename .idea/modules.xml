@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Desafio-UNIFOR-Hexagonal-Quarkus-Angular.iml" filepath="$PROJECT_DIR$/.idea/Desafio-UNIFOR-Hexagonal-Quarkus-Angular.iml" />
+      <module fileurl="file://$PROJECT_DIR$/adapters.iml" filepath="$PROJECT_DIR$/adapters.iml" />
     </modules>
   </component>
 </project>

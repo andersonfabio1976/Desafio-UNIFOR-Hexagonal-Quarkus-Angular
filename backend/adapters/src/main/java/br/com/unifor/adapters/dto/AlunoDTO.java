@@ -1,10 +1,18 @@
 package br.com.unifor.adapters.dto;
 
-import java.time.LocalDate;
+import br.com.unifor.adapters.repository.entity.MatriculaEntity;
+import br.com.unifor.domain.model.Matricula;
 
-public record AlunoDTO(
-        Long id,
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+
+public record AlunoDTO (
+        Long identifier,
         String nome,
         String email,
-        LocalDate dataNascimento
+        LocalDate dataNascimento,
+        List<Matricula> matriculas,
+        Instant createdOn,
+        Instant updatedOn
 ) {}

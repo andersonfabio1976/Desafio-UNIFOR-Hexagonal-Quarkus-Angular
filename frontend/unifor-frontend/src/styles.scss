@@ -1,0 +1,28 @@
+@use '@angular/material' as mat;
+
+// 🔷 Define a paleta de cores do tema UNIFOR (base azul)
+$unifor-primary: mat.define-palette(mat.$indigo-palette, 500);
+$unifor-accent: mat.define-palette(mat.$blue-palette, 400, 200, 600);
+$unifor-warn: mat.define-palette(mat.$red-palette);
+
+// 🔹 Cria o tema principal (light theme)
+$unifor-theme: mat.define-light-theme((
+  color: (
+    primary: $unifor-primary,
+    accent: $unifor-accent,
+    warn: $unifor-warn
+  ),
+  typography: mat.define-typography-config(),
+));
+
+// 🔸 Aplica o núcleo do Material e o tema
+@include mat.core();
+@include mat.all-component-themes($unifor-theme);
+
+// 🔹 Define estilos globais
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
+}

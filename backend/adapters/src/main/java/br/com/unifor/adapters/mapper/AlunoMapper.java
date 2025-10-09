@@ -12,4 +12,5 @@ public interface AlunoMapper {
     AlunoEntity toEntity(Aluno domain);
     AlunoDTO toDTO(Aluno domain);
     List<AlunoDTO> toDTO(List<Aluno> domain);
+    Aluno toDomain(AlunoDTO dto);
 }
