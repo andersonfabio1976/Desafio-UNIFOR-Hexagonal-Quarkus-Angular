@@ -2,7 +2,10 @@ package br.com.unifor.adapters.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,11 +13,9 @@ import java.util.List;
 @Table(name = "aluno")
 @Getter
 @Setter
-public class AlunoEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+@NoArgsConstructor
+public class AlunoEntity extends AuditableEntity {
 
     private String nome;
     private String email;

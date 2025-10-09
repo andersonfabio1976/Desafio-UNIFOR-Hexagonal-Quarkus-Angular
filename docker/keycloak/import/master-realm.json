@@ -1,0 +1,20 @@
+{
+  "id": "master",
+  "realm": "master",
+  "displayName": "Master Realm",
+  "enabled": true,
+  "sslRequired": "NONE",
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Administrador",
+      "lastName": "Keycloak",
+      "credentials": [
+        { "type": "password", "value": "admin", "temporary": false }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ]
+}

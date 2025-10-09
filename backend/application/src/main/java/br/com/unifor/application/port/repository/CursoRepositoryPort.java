@@ -5,13 +5,6 @@ import br.com.unifor.domain.model.Curso;
 import java.util.List;
 import java.util.Optional;
 
-public interface CursoRepositoryPort {
+public interface CursoRepositoryPort extends BaseRepositoryPort<Curso,Long> {
 
-    Optional<Curso> buscarPorId(Long id);
-
-    List<Curso> listarTodos();
-
-    void salvar(Curso curso);
-
-    boolean excluirPorId(Long id);
 }
