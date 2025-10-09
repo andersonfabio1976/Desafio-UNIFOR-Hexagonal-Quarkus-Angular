@@ -1,4 +1,4 @@
-# 🎓 Desafio Técnico UNIFOR - Arquitetura Hexagonal com Quarkus e Angular
+# 🎓 Desafio Técnico UNIFOR - Arquitetura Hexagonal com Quarkus e Angular (V2)
 
 <p align="center">
   <b>Desenvolvido por Anderson Fábio — Desenvolvedor Full Stack Java Sênior</b>
@@ -6,67 +6,81 @@
 
 ---
 
-## 🧭 Sobre o Projeto
+[⬅️ Navegar para README_V1](./README_V1.md)
 
-Este projeto foi desenvolvido como parte de um **desafio técnico proposto pela Universidade de Fortaleza (UNIFOR)** durante o processo de **contratação para a posição de Desenvolvedor Full Stack Java Sênior**.
+```
 
-O objetivo é demonstrar **proficiência em arquitetura hexagonal**, **boas práticas de engenharia de software** e o uso de **tecnologias modernas** em um ambiente corporativo **full stack**.
+---
 
-📄 [Clique aqui para acessar o documento oficial do desafio técnico da UNIFOR](./docs/DESAFIO_TECNICO_UNIFOR.pdf)
+## 📌 Sobre esta versão
+
+Esta versão atualiza a documentação com as mudanças técnicas feitas após a entrega inicial:
+
+- Banco de dados **MySQL** (substituindo PostgreSQL)
+- **Swagger/OpenAPI** para testar a API
+- Inclusão de **MapStruct** para mapeamento DTO ↔ Domain ↔ Entity
+- Uso de **Lombok** para redução de boilerplate
+- Testes unitários e integrados com **JUnit e Mockito**
+- **Panache** e **Jakarta Persistence** para persistência e integração com Quarkus
 
 ---
 
 ## 🧱 Tecnologias e Conceitos Aplicados
 
-- **Backend:** Quarkus (jdk-17, CDI, JAX-RS, Hibernate ORM, Flyway, Lombok, RabbitMQ — *avaliação de uso*)  
-- **Frontend:** Angular 15+ (Standalone Components, Nginx containerizado)  
-- **Segurança:** Keycloak (OpenID Connect / RBAC)  
-- **Banco de Dados:** PostgreSQL  
-- **Arquitetura:** Hexagonal / Clean Architecture  
-- **Infraestrutura:** Docker Compose  
+- **Backend:** Quarkus (jdk-17, CDI, JAX-RS, Hibernate ORM, Panache, Flyway, Lombok, MapStruct, 
+  Swagger/OpenAPI)
+- **Frontend:** Angular 15+ (Standalone Components, Nginx containerizado)
+- **Segurança:** Keycloak (OpenID Connect / RBAC)
+- **Banco de Dados:** MySQL 8.1
+- **Arquitetura:** Hexagonal / Clean Architecture
+- **Infraestrutura:** Docker Compose
 - **Boas Práticas:** Clean Code, SOLID, CQRS, DRY, CI/CD, DESIGN PATTERNS
 
 ---
 
 ## 🧩 Estrutura do Projeto
 
-```
-
+```text
 desafio-unifor-hexagonal-quarkus-angular/
 │
-├─ backend/      → Projeto Quarkus (arquitetura hexagonal/clean, módulos Maven)
-├─ frontend/     → Aplicação Angular (Standalone Components, servida via Nginx)
-├─ docker/       → Orquestração com PostgreSQL, Keycloak e Aplicações
-├─ docs/         → Documentação e PDF do desafio técnico
-└─ README.md     → Este documento
-
+├─ backend/      
+│   ├─ adapters/        
+│   │   ├─ rest/        → Controllers com endpoints JAX-RS
+│   │   ├─ repository/  → Implementações de persistência com Panache
+│   │   └─ mapper/      → MapStruct DTO ↔ Domain ↔ Entity
+│   ├─ application/    
+│   │   └─ port/        → Repository Ports e Service Ports
+│   ├─ domain/         
+│   │   ├─ entities/    → Entidades e regras de negócio
+│   │   └─ service/     → Serviços de domínio (lógica de negócio)
+│   └─ infrastructure/  → Configurações de infra, DB, Keycloak, etc.
+│
+├─ frontend/     
+├─ docker/       
+├─ docs/         
+└─ README.md
+  
 ````
-
----
-
-## 🔄 Estratégia de Branches (Gitflow)
-
-- **main** → versão final do projeto (entrega oficial)  
-- **stage** → branch de integração contínua  
-- **feature/** → branches de desenvolvimento incremental  
 
 ---
 
 ## 🚀 Execução do Projeto
 
 **Pré-requisitos:**
-- Docker e Docker Compose instalados.
+
+* Docker e Docker Compose instalados.
 
 **Comando único para subir o ambiente:**
+
 ```bash
 docker-compose up -d
-````
+```
 
 **Acessos:**
 
 * **Frontend Angular:** [http://localhost:1000](http://localhost:1000)
-* **Backend Quarkus:** [http://localhost:8080](http://localhost:8080)
-* **Keycloak:** [http://localhost:8081](http://localhost:8081)
+* **Backend Quarkus + Swagger:** [http://localhost:8081/swagger-ui](http://localhost:8080/q/swagger-ui)
+* **Keycloak:** [http://localhost:8080](http://localhost:8081)
 
 > Nenhuma instalação local de Node, Maven ou Java é necessária — todo o ambiente é executado em containers Docker.
 
@@ -74,13 +88,22 @@ docker-compose up -d
 
 ## 🧠 Objetivo Arquitetural
 
-O projeto foi estruturado para demonstrar:
+Fluxo do backend:
 
-* **Clareza na separação de camadas** (Domain, Application, Adapters)
-* **Baixo acoplamento** e **alta testabilidade**
-* Aplicação dos **princípios SOLID**
-* **Redução de duplicidade** com uso de *Generics* e práticas **DRY**
-* **Configuração mínima** para atingir o resultado esperado, sem *over-engineering*
+```
+Controller (adapters/rest)
+        ↓
+Service / UseCase (adapters)
+        ↓
+Port (application/ports)
+        ↓
+Domain (entities)
+```
+
+* **Controllers:** Endpoints REST
+* **Services/UseCases:** Regras de negócio ** Mantido em Application
+* **Ports:** Interfaces para comunicação com repositories
+* **Domain:** Entidades e regras puras
 
 ---
 
@@ -89,7 +112,9 @@ O projeto foi estruturado para demonstrar:
 **Anderson Fábio**
 Desenvolvedor Full Stack Java Sênior
 📧 **[andersonfabio.1976@gmail.com](mailto:andersonfabio.1976@gmail.com)**
-🔗 [LinkedIn](https://www.linkedin.com/in/andersonfabio1976) • 💻 [GitHub](https://github.com/andersonfabio1976)
+🔗 [LinkedIn](https://www.linkedin.com/in/andersonfabio1976) • 💻 [GitHub](https://github.com/andersonfabio)
 
 ---
+
+[⬅️ Voltar para README_V1](./README_V1.md)
 

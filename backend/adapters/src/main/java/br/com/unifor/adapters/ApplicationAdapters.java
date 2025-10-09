@@ -1,0 +1,11 @@
+package br.com.unifor.adapters;
+
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.annotations.QuarkusMain;
+
+@QuarkusMain
+public class ApplicationAdapters {
+    public static void main(String[] args) {
+        Quarkus.run(args);
+    }
+}

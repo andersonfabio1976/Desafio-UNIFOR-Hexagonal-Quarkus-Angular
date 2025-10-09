@@ -1,29 +1,71 @@
-version: '3.9'
 services:
-  backend:
+  unifor-mysql:
+    image: mysql:8.1
+    container_name: unifor-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: unifor_db
+      MYSQL_USER: unifor_user
+      MYSQL_PASSWORD: unifor_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - unifor-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  unifor-backend:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-      - keycloak
-
-  postgres:
-    image: postgres:15
+    container_name: unifor-backend
     environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: desafio_unifor
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://unifor-mysql:3306/unifor_db
+      QUARKUS_DATASOURCE_USERNAME: unifor_user
+      QUARKUS_DATASOURCE_PASSWORD: unifor_pass
+    depends_on:
+      unifor-mysql:
+        condition: service_healthy
     ports:
-      - "5432:5432"
+      - "8081:8080" # ✅ para não conflitar com o Keycloak
+    networks:
+      - unifor-network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:23.0.1
-    command: ["start-dev"]
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: keycloak
+    command:
+      - start-dev
+      - --import-realm
     environment:
+      KC_DB: mysql
+      KC_DB_URL_HOST: unifor-mysql
+      KC_DB_URL_PORT: 3306
+      KC_DB_URL_DATABASE: unifor_db
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: root
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak/import:/opt/keycloak/data/import
     ports:
-      - "8081:8080"
+      - "8080:8080" # ✅ Keycloak na 8080
+    depends_on:
+      unifor-mysql:
+        condition: service_healthy
+    networks:
+      - unifor-network
+
+networks:
+  unifor-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
