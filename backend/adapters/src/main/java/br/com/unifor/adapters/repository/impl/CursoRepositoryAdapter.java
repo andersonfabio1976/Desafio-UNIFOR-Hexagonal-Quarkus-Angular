@@ -15,7 +15,7 @@ public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, C
 
     @jakarta.inject.Inject
     public CursoRepositoryAdapter(CursoMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity);
         this.mapper = mapper;
     }
 }

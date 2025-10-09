@@ -14,7 +14,7 @@ public class DisciplinaRepositoryAdapter
     private final DisciplinaMapper mapper;
 
     public DisciplinaRepositoryAdapter(DisciplinaMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity);
         this.mapper = mapper;
     }
 }

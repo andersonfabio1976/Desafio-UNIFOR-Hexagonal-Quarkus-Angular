@@ -1,7 +1,5 @@
 package br.com.unifor.adapters.repository.entity;
 
-import br.com.unifor.domain.model.Curso;
-import br.com.unifor.domain.model.Disciplina;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class SemestreEntity extends  BaseEntity {
+public class SemestreEntity extends AuditableEntity {
 
     private int numero;
 

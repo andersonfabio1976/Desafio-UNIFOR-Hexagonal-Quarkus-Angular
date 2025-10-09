@@ -37,7 +37,7 @@ public class MatriculaController {
     public Response salvar(@PathParam("identifierAluno") Long identifierAluno,
                            @PathParam("identifierCurso") Long identifierCurso,
                            MatriculaDTO dto) {
-        Matricula matricula = mapper.toDomain(dto);
+        Matricula matricula = mapper.toDomainFromDTO(dto);
         service.salvar(identifierAluno, identifierCurso, matricula);
         return Response.status(Response.Status.CREATED).build();
     }

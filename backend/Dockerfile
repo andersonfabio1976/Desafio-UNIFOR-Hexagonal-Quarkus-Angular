@@ -3,11 +3,11 @@ FROM maven:3.9.3-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY pom.xml ./
-COPY domain/pom.xml ./domain/
-COPY application/pom.xml ./application/
-COPY infrastructure/pom.xml ./infrastructure/
-COPY adapters/pom.xml ./adapters/
+COPY backend/pom.xml ./
+COPY backend/domain/pom.xml ./domain/
+COPY backend/application/pom.xml ./application/
+COPY backend/infrastructure/pom.xml ./infrastructure/
+COPY backend/adapters/pom.xml ./adapters/
 
 COPY . .
 
@@ -19,6 +19,13 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 COPY --from=build /app/adapters/target/quarkus-app /app/quarkus-app
+
+# Copia os dois scripts de wait
+COPY docker/wait-for-mysql.sh /app/wait-for-mysql.sh
+COPY docker/wait-for-keycloak.sh /app/wait-for-keycloak.sh
+
+RUN chmod +x /app/wait-for-mysql.sh /app/wait-for-keycloak.sh
+
 
 EXPOSE 8080
 

@@ -1,13 +1,11 @@
 package br.com.unifor.adapters.repository.entity;
 
-import br.com.unifor.domain.model.Semestre;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +14,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class CursoEntity extends BaseEntity {
+public class CursoEntity extends AuditableEntity {
 
     private String nome;
 
