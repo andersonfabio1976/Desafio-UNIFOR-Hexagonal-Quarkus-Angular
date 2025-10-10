@@ -4,6 +4,7 @@ import br.com.unifor.adapters.dto.DisciplinaDTO;
 import br.com.unifor.adapters.mapper.DisciplinaMapper;
 import br.com.unifor.application.service.DisciplinaService;
 import br.com.unifor.domain.model.Disciplina;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,6 +14,7 @@ import java.util.List;
 @Path("/cursos/{identifierCurso}/disciplinas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
 public class DisciplinaController {
 
     @Inject

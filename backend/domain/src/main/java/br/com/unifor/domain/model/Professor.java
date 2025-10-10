@@ -15,6 +15,7 @@ import java.util.List;
 public class Professor {
     private Long identifier;
     private String nome;
+    private Boolean coordenador;
     private String email;
     private String area;
     private List<Disciplina> disciplinas;

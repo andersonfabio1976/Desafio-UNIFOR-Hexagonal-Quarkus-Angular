@@ -18,6 +18,7 @@ public class ProfessorEntity extends BaseEntity {
     private String nome;
     private String email;
     private String area;
+    private Boolean coordenador;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DisciplinaEntity> disciplinas;

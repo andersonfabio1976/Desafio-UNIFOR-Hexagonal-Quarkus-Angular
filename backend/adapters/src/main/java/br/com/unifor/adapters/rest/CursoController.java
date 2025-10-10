@@ -4,6 +4,7 @@ import br.com.unifor.adapters.dto.CursoDTO;
 import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.application.service.CursoService;
 import br.com.unifor.domain.model.Curso;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @Path("/cursos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
 public class CursoController {
 
     @Inject

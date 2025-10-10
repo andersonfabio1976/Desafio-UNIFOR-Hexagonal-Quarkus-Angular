@@ -4,6 +4,7 @@ import br.com.unifor.adapters.dto.SemestreDTO;
 import br.com.unifor.adapters.mapper.SemestreMapper;
 import br.com.unifor.application.service.SemestreService;
 import br.com.unifor.domain.model.Semestre;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,6 +14,7 @@ import java.util.List;
 @Path("/cursos/{idCurso}/semestres")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
 public class SemestreController {
 
     @Inject

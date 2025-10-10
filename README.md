@@ -18,7 +18,6 @@ Esta versão atualiza a documentação com as mudanças técnicas feitas após a
 
 - Banco de dados **MySQL** (substituindo PostgreSQL)
 - **Swagger/OpenAPI** para testar a API
-- **Services/UseCases** movidos para **adapters** por limitações do Quarkus
 - Inclusão de **MapStruct** para mapeamento DTO ↔ Domain ↔ Entity
 - Uso de **Lombok** para redução de boilerplate
 - Testes unitários e integrados com **JUnit e Mockito**
@@ -68,20 +67,18 @@ desafio-unifor-hexagonal-quarkus-angular/
 ## 🚀 Execução do Projeto
 
 **Pré-requisitos:**
-
-* Docker e Docker Compose instalados.
+- Docker e Docker Compose instalados.
 
 **Comando único para subir o ambiente:**
-
 ```bash
 docker-compose up -d
-```
+````
 
 **Acessos:**
 
 * **Frontend Angular:** [http://localhost:1000](http://localhost:1000)
-* **Backend Quarkus + Swagger:** [http://localhost:8080/swagger-ui](http://localhost:8080/q/swagger-ui)
-* **Keycloak:** [http://localhost:8081](http://localhost:8081)
+* **Backend Quarkus + Swagger:** [http://localhost:8081/swagger-ui](http://localhost:8080/q/swagger-ui)
+* **Keycloak:** [http://localhost:8080](http://localhost:8081)
 
 > Nenhuma instalação local de Node, Maven ou Java é necessária — todo o ambiente é executado em containers Docker.
 

@@ -32,7 +32,34 @@ services:
       unifor-mysql:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8081:8080" # ✅ para não conflitar com o Keycloak
+    networks:
+      - unifor-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: keycloak
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: mysql
+      KC_DB_URL_HOST: unifor-mysql
+      KC_DB_URL_PORT: 3306
+      KC_DB_URL_DATABASE: unifor_db
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: root
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak/import:/opt/keycloak/data/import
+    ports:
+      - "8080:8080" # ✅ Keycloak na 8080
+    depends_on:
+      unifor-mysql:
+        condition: service_healthy
     networks:
       - unifor-network
 
