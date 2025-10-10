@@ -4,6 +4,7 @@ import br.com.unifor.adapters.dto.AlunoDTO;
 import br.com.unifor.adapters.mapper.AlunoMapper;
 import br.com.unifor.application.service.AlunoService;
 import br.com.unifor.domain.model.Aluno;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @Path("/alunos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed({"ROLE_ADMIN", "ROLE_ADMINISTRADOR"})
 public class AlunoController {
 
     @Inject

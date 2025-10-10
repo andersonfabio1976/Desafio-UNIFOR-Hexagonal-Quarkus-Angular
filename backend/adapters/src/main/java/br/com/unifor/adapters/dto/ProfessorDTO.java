@@ -11,6 +11,7 @@ public record ProfessorDTO(
         String email,
         String area,
         List<Disciplina> disciplinas,
+        Boolean coordenador,
         Instant createdOn,
         Instant updatedOn
         ) {}
