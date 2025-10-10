@@ -1,0 +1,44 @@
+services:
+  unifor-mysql:
+    image: mysql:8.1
+    container_name: unifor-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: unifor_db
+      MYSQL_USER: unifor_user
+      MYSQL_PASSWORD: unifor_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - unifor-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  unifor-backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: unifor-backend
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://unifor-mysql:3306/unifor_db
+      QUARKUS_DATASOURCE_USERNAME: unifor_user
+      QUARKUS_DATASOURCE_PASSWORD: unifor_pass
+    depends_on:
+      unifor-mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - unifor-network
+
+networks:
+  unifor-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

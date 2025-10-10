@@ -1,0 +1,20 @@
+package br.com.unifor.adapters.repository.impl;
+
+import br.com.unifor.adapters.mapper.SemestreMapper;
+import br.com.unifor.adapters.repository.entity.SemestreEntity;
+import br.com.unifor.application.port.repository.SemestreRepositoryPort;
+import br.com.unifor.domain.model.Semestre;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class SemestreRepositoryAdapter
+        extends BaseRepositoryAdapter<SemestreEntity, Semestre>
+        implements SemestreRepositoryPort {
+
+    private final SemestreMapper mapper;
+
+    public SemestreRepositoryAdapter(SemestreMapper mapper) {
+        super(mapper::toDomain, mapper::toEntity);
+        this.mapper = mapper;
+    }
+}
