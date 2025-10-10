@@ -67,14 +67,12 @@ desafio-unifor-hexagonal-quarkus-angular/
 ## 🚀 Execução do Projeto
 
 **Pré-requisitos:**
-
-* Docker e Docker Compose instalados.
+- Docker e Docker Compose instalados.
 
 **Comando único para subir o ambiente:**
-
 ```bash
 docker-compose up -d
-```
+````
 
 **Acessos:**
 

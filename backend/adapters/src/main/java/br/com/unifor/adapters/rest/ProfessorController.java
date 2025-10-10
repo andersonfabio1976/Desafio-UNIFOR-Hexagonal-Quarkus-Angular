@@ -23,7 +23,6 @@ public class ProfessorController {
     @Inject
     ProfessorMapper mapper;
 
-
     @GET
     public List<ProfessorDTO> listarTodos() {
         return mapper.toDTO(servico.listarTodos());
