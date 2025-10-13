@@ -14,7 +14,7 @@ public class MatriculaRepositoryAdapter
     private final MatriculaMapper mapper;
 
     public MatriculaRepositoryAdapter(MatriculaMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity);
         this.mapper = mapper;
     }
 }

@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class DisciplinaEntity extends BaseEntity {
+public class DisciplinaEntity extends AuditableEntity {
 
     private String nome;
 

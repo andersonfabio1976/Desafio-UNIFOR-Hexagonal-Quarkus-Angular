@@ -14,7 +14,7 @@ public class SemestreRepositoryAdapter
     private final SemestreMapper mapper;
 
     public SemestreRepositoryAdapter(SemestreMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity);
         this.mapper = mapper;
     }
 }

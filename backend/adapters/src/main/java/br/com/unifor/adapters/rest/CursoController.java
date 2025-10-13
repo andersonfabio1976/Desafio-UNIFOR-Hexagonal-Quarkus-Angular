@@ -39,7 +39,7 @@ public class CursoController {
     @POST
     @Transactional
     public void salvar(CursoDTO dto) {
-        Curso curso = mapper.toDomain(mapper.toEntity(mapper.toDomain(dto)));
+        Curso curso = mapper.toDomainFromEntity(mapper.toEntity(mapper.toDomainFromDTO(dto)));
         servico.salvar(curso);
     }
 

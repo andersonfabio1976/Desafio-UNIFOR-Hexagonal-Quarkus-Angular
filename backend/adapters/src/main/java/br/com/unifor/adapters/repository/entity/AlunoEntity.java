@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class AlunoEntity extends BaseEntity {
+public class AlunoEntity extends AuditableEntity {
 
     private String nome;
     private String email;
