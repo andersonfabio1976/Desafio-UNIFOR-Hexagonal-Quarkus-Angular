@@ -14,7 +14,7 @@ public class AlunoRepositoryAdapter extends BaseRepositoryAdapter<AlunoEntity, A
 
     @jakarta.inject.Inject
     public AlunoRepositoryAdapter(AlunoMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity);
         this.mapper = mapper;
     }
 }

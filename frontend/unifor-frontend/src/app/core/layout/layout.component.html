@@ -1,26 +1,21 @@
-<mat-nav-list>
-  <a mat-list-item routerLink="/admin/alunos" routerLinkActive="active">
-    <mat-icon>school</mat-icon>
-    <span>Alunos</span>
-  </a>
+<mat-sidenav-container class="h-screen">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <!-- Menu do ADMIN -->
+      <ng-container *ngIf="isAdmin">
+        <a mat-list-item routerLink="/admin/alunos">Alunos</a>
+        <a mat-list-item routerLink="/admin/professores">Professores</a>
+        <a mat-list-item routerLink="/admin/cursos">Cursos</a>
+        <a mat-list-item routerLink="/admin/matriculas">Matrículas</a>
+        <a mat-list-item routerLink="/admin/semestres">Semestres</a>
+      </ng-container>
+      <!-- Você pode adicionar menus do Professor/Aluno aqui depois -->
+    </mat-nav-list>
 
-  <a mat-list-item routerLink="/admin/professores" routerLinkActive="active">
-    <mat-icon>person</mat-icon>
-    <span>Professores</span>
-  </a>
+    <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+  </mat-sidenav>
 
-  <a mat-list-item routerLink="/admin/cursos" routerLinkActive="active">
-    <mat-icon>book</mat-icon>
-    <span>Cursos</span>
-  </a>
-
-  <a mat-list-item routerLink="/admin/matriculas" routerLinkActive="active">
-    <mat-icon>assignment</mat-icon>
-    <span>Matrículas</span>
-  </a>
-
-  <a mat-list-item routerLink="/admin/usuarios" routerLinkActive="active">
-    <mat-icon>manage_accounts</mat-icon>
-    <span>Usuários</span>
-  </a>
-</mat-nav-list>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

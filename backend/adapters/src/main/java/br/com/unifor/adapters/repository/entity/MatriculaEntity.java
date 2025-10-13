@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class MatriculaEntity extends BaseEntity {
+public class MatriculaEntity extends AuditableEntity {
 
     private LocalDate dataMatricula;
 

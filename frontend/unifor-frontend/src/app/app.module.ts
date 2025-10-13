@@ -1,52 +1,33 @@
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+// src/app/app.module.ts
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { TokenInterceptor } from './core/auth/token.interceptor';
-import { LayoutModule } from './core/layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { environment } from '../environments/environment';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: environment.keycloak.url,
-        realm: environment.keycloak.realm,
-        clientId: environment.keycloak.clientId
-      },
-      initOptions: {
-        onLoad: 'login-required',
-        checkLoginIframe: false
-      }
-    });
-}
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { MaterialModule } from './shared/material.module';
+import { CoreModule } from './core/core.module';
+import { initializeKeycloak } from './core/auth/keycloack-init.factory';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    LayoutModule,
+    AppRoutingModule,
+    MaterialModule,
+    CoreModule,
     KeycloakAngularModule,
-    AppRoutingModule
   ],
   providers: [
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService]
+      deps: [KeycloakService],
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

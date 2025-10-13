@@ -39,7 +39,7 @@ public class AlunoController {
     @POST
     @Transactional
     public void salvar(AlunoDTO dto) {
-        Aluno aluno = mapper.toDomain(mapper.toEntity(mapper.toDomain(dto)));
+        Aluno aluno = mapper.toDomainFromEntity(mapper.toEntity(mapper.toDomainFromDTO(dto)));
         servico.salvar(aluno);
     }
 

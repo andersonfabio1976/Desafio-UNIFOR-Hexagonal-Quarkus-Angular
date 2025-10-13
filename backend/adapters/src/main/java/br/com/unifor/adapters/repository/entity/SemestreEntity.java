@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class SemestreEntity extends  BaseEntity {
+public class SemestreEntity extends AuditableEntity {
 
     private int numero;
 

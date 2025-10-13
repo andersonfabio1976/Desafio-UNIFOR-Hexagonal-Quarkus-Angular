@@ -45,7 +45,7 @@ public class DisciplinaController {
 
     @POST
     public Response salvar(@PathParam("identifierCurso") Long identifierCurso, DisciplinaDTO dto) {
-        Disciplina disciplina = mapper.toDomain(dto);
+        Disciplina disciplina = mapper.toDomainFromDTO(dto);
         service.salvar(identifierCurso, disciplina);
         return Response.status(Response.Status.CREATED).build();
     }

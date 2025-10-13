@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class ProfessorEntity extends BaseEntity {
+public class ProfessorEntity extends AuditableEntity {
 
     private String nome;
     private String email;

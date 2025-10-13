@@ -45,7 +45,7 @@ public class SemestreController {
 
     @POST
     public Response salvar(@PathParam("identifierCurso") Long identifierCurso, SemestreDTO dto) {
-        Semestre semestre = mapper.toDomain(dto);
+        Semestre semestre = mapper.toDomainFromDTO(dto);
         service.salvar(identifierCurso, semestre);
         return Response.status(Response.Status.CREATED).build();
     }

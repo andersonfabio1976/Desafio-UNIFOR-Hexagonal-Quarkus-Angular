@@ -21,9 +21,14 @@ services:
 
   unifor-backend:
     build:
-      context: ../backend
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: backend/Dockerfile
     container_name: unifor-backend
+    command: [
+        "sh",
+        "-c",
+        "/app/wait-for-mysql.sh && /app/wait-for-keycloak.sh && java -jar quarkus-app/quarkus-run.jar"
+      ]
     environment:
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://unifor-mysql:3306/unifor_db
       QUARKUS_DATASOURCE_USERNAME: unifor_user
@@ -36,16 +41,12 @@ services:
     networks:
       - unifor-network
 
-  keycloak:
+  unifor-keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
-    container_name: keycloak
+    container_name: unifor-keycloak
     command:
       - start-dev
       - --import-realm
-      - --http-enabled=true
-      - --hostname-strict=false
-      - --hostname-strict-https=false
-      - --proxy=edge
     environment:
       KC_DB: mysql
       KC_DB_URL_HOST: unifor-mysql
@@ -57,7 +58,6 @@ services:
       KC_METRICS_ENABLED: "true"
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import
     ports:
