@@ -1,5 +1,6 @@
 package br.com.unifor.adapters.repository.impl;
 
+import br.com.unifor.adapters.dto.SemestreDTO;
 import br.com.unifor.adapters.mapper.SemestreMapper;
 import br.com.unifor.adapters.repository.entity.SemestreEntity;
 import br.com.unifor.application.port.repository.SemestreRepositoryPort;
@@ -8,13 +9,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class SemestreRepositoryAdapter
-        extends BaseRepositoryAdapter<SemestreEntity, Semestre>
+        extends BaseRepositoryAdapter<SemestreEntity, Semestre, SemestreDTO>
         implements SemestreRepositoryPort {
 
     private final SemestreMapper mapper;
 
     public SemestreRepositoryAdapter(SemestreMapper mapper) {
-        super(mapper::toDomainFromEntity, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
 }

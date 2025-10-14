@@ -24,29 +24,34 @@ services:
       context: ..
       dockerfile: backend/Dockerfile
     container_name: unifor-backend
-    command: [
-        "sh",
-        "-c",
-        "/app/wait-for-mysql.sh && /app/wait-for-keycloak.sh && java -jar quarkus-app/quarkus-run.jar"
-      ]
+    # Removido "command" para não sobrescrever o ENTRYPOINT do Dockerfile
     environment:
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://unifor-mysql:3306/unifor_db
       QUARKUS_DATASOURCE_USERNAME: unifor_user
       QUARKUS_DATASOURCE_PASSWORD: unifor_pass
+#      QUARKUS_OIDC_ENABLED: "false"
+#      QUARKUS_OIDC_TENANT_ENABLED: "false"
+#      QUARKUS_HTTP_AUTH_PERMISSION_ALL_PATHS: "/*"
+#      QUARKUS_HTTP_AUTH_PERMISSION_ALL_POLICY: "permit"
+#      QUARKUS_HTTP_AUTH_PROACTIVE: "false"
+#
+#      MP_JWT_VERIFY_PUBLICKEY: ""
+#      MP_JWT_VERIFY_ISSUER: ""
+#      # Se quiser forçar perfil prod (é o padrão), pode omitir
+#      # QUARKUS_PROFILE: prod
     depends_on:
       unifor-mysql:
         condition: service_healthy
     ports:
-      - "8081:8080" # ✅ para não conflitar com o Keycloak
+      - "8081:8080"  # Host 8081 -> Container 8080 (Quarkus escuta 8080)
     networks:
       - unifor-network
+    command: ["sh","-c","/app/wait-for-mysql.sh && exec java -jar /app/quarkus-app/quarkus-run.jar"]
 
   unifor-keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
     container_name: unifor-keycloak
-    command:
-      - start-dev
-      - --import-realm
+    command: ["start-dev", "--import-realm"]
     environment:
       KC_DB: mysql
       KC_DB_URL_HOST: unifor-mysql
@@ -61,7 +66,7 @@ services:
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import
     ports:
-      - "8080:8080" # ✅ Keycloak na 8080
+      - "8080:8080"
     depends_on:
       unifor-mysql:
         condition: service_healthy

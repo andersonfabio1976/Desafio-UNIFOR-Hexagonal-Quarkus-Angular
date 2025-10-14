@@ -8,11 +8,13 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.net.URI;
 import java.util.Optional;
 
 @Path("/alunos/{idAluno}/cursos/{idCurso}/matriculas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+//@RolesAllowed({"ADMIN", "ROLE_ADMINISTRADOR"})
 public class MatriculaController {
 
     @Inject
@@ -22,31 +24,42 @@ public class MatriculaController {
     MatriculaMapper mapper;
 
     @GET
-    @Path("/{idMatricula}")
+    @Path("/{identifierAluno}/{identifierCurso}/{identifierMatricula}")
     public Response buscarPorIdentifier(@PathParam("identifierAluno") Long identifierAluno,
                                 @PathParam("identifierCurso") Long identifierCurso,
                                 @PathParam("identifierMatricula") Long identifierMatricula) {
         Optional<MatriculaDTO> matricula = service.buscarPorIdentifier(identifierAluno, identifierMatricula)
                 .map(mapper::toDTO);
         return matricula.map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND))
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"))
                 .build();
     }
 
     @POST
+    @Path("/{identifierAluno},/{identifierCurso}")
     public Response salvar(@PathParam("identifierAluno") Long identifierAluno,
                            @PathParam("identifierCurso") Long identifierCurso,
                            MatriculaDTO dto) {
         Matricula matricula = mapper.toDomainFromDTO(dto);
         service.salvar(identifierAluno, identifierCurso, matricula);
-        return Response.status(Response.Status.CREATED).build();
+
+        if (dto.getIdentifier() == null && matricula != null) {
+            return Response
+                    .created(URI.create("/alunos/" + matricula.toString()))
+                    .entity(matricula)
+                    .build();
+        }
+        return Response.ok(matricula).build();
     }
 
     @DELETE
-    @Path("/{idMatricula}")
+    @Path("/{identifierAluno}/{identifierMatricula}")
     public Response removerPorIdentifier(@PathParam("identifierAluno") Long identifierAluno,
                                  @PathParam("identifierMatricula") Long identifierMatricula) {
         boolean removido = service.excluirPorIdentifier(identifierAluno, identifierMatricula);
-        return removido ? Response.noContent().build() : Response.status(Response.Status.NOT_FOUND).build();
+        if (!removido) {
+            throw new NotFoundException("Aluno não encontrado");
+        }
+        return Response.noContent().build();
     }
 }

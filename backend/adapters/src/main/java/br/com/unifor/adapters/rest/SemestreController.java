@@ -4,17 +4,17 @@ import br.com.unifor.adapters.dto.SemestreDTO;
 import br.com.unifor.adapters.mapper.SemestreMapper;
 import br.com.unifor.application.service.SemestreService;
 import br.com.unifor.domain.model.Semestre;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
+import java.net.URI;
+import java.util.Optional;
 
-@Path("/cursos/{idCurso}/semestres")
+@Path("/alunos/{idAluno}/cursos/{idCurso}/Semestres")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
+//@RolesAllowed({"ADMIN", "ROLE_ADMINISTRADOR"})
 public class SemestreController {
 
     @Inject
@@ -24,37 +24,43 @@ public class SemestreController {
     SemestreMapper mapper;
 
     @GET
-    public Response listar(@PathParam("identifierCurso") Long identifierCurso) {
-        List<SemestreDTO> semestres = service.listarPorCurso(identifierCurso)
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
-        return Response.ok(semestres).build();
-    }
-
-    @GET
-    @Path("/{identifierSemestre}")
-    public Response buscarPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                @PathParam("identifierSemestre") Long identifierSemestre) {
-        return service.buscarPorIdentifier(identifierCurso, identifierSemestre)
-                .map(mapper::toDTO)
-                .map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND))
+    @Path("/{identifierAluno}/{identifierCurso}/{identifierSemestre}")
+    public Response buscarPorIdentifier(@PathParam("identifierAluno") Long identifierAluno,
+                                        @PathParam("identifierCurso") Long identifierCurso,
+                                        @PathParam("identifierSemestre") Long identifierSemestre) {
+        Optional<SemestreDTO> Semestre = service.buscarPorIdentifier(identifierAluno, identifierSemestre)
+                .map(mapper::toDTO);
+        return Semestre.map(Response::ok)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"))
                 .build();
     }
 
     @POST
-    public Response salvar(@PathParam("identifierCurso") Long identifierCurso, SemestreDTO dto) {
-        Semestre semestre = mapper.toDomainFromDTO(dto);
-        service.salvar(identifierCurso, semestre);
-        return Response.status(Response.Status.CREATED).build();
+    @Path("/{identifierAluno},/{identifierCurso}")
+    public Response salvar(@PathParam("identifierAluno") Long identifierAluno,
+                           @PathParam("identifierCurso") Long identifierCurso,
+                           SemestreDTO dto) {
+        Semestre Semestre = mapper.toDomainFromDTO(dto);
+        service.salvar(identifierCurso, Semestre);
+        SemestreDTO resposta = mapper.toDTO(Semestre);
+
+        if (dto.getIdentifier() == null && resposta != null) {
+            return Response
+                    .created(URI.create("/alunos/" + resposta.toString()))
+                    .entity(resposta)
+                    .build();
+        }
+        return Response.ok(resposta).build();
     }
 
     @DELETE
-    @Path("/{identifierSemestre}")
-    public Response removerPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                 @PathParam("identifierSemestre") Long identifierSemestre) {
-        boolean removido = service.excluirPorIdentifier(identifierCurso, identifierSemestre);
-        return removido ? Response.noContent().build() : Response.status(Response.Status.NOT_FOUND).build();
+    @Path("/{identifierAluno}/{identifierSemestre}")
+    public Response removerPorIdentifier(@PathParam("identifierAluno") Long identifierAluno,
+                                         @PathParam("identifierSemestre") Long identifierSemestre) {
+        boolean removido = service.excluirPorIdentifier(identifierAluno, identifierSemestre);
+        if (!removido) {
+            throw new NotFoundException("Aluno não encontrado");
+        }
+        return Response.noContent().build();
     }
 }

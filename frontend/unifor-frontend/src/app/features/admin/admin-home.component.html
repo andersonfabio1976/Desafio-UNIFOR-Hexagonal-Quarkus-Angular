@@ -1,0 +1,23 @@
+<mat-sidenav-container class="admin-sidenav-container">
+  <mat-sidenav #sidenav class="admin-sidenav" [mode]="'side'" [opened]="true">
+    <div class="admin-sidenav__header">
+      <div class="admin-logo">Painel Admin</div>
+    </div>
+
+    <mat-nav-list class="admin-menu">
+      <a mat-list-item routerLink="/admin/alunos" routerLinkActive="active">Alunos</a>
+      <a mat-list-item routerLink="/admin/professores" routerLinkActive="active">Professores</a>
+      <a mat-list-item routerLink="/admin/cursos" routerLinkActive="active">Cursos</a>
+      <a mat-list-item routerLink="/admin/matriculas" routerLinkActive="active">Matrículas</a>
+      <a mat-list-item routerLink="/admin/semestres" routerLinkActive="active">Semestres</a>
+    </mat-nav-list>
+
+    <div class="admin-sidenav__footer">
+      <button mat-raised-button color="warn" class="logout-btn" (click)="logout()">Sair</button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="admin-main">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

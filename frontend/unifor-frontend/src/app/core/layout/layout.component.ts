@@ -1,28 +1,33 @@
+// src/app/core/layout/layout.component.ts
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
   isAdmin = false;
-  isCoordenador = false;
   isProfessor = false;
   isAluno = false;
 
-  constructor(private keycloak: KeycloakService) {}
+  constructor(private keycloak: KeycloakService, private router: Router) {}
 
   async ngOnInit() {
-    const roles = this.keycloak.getUserRoles();
-    this.isAdmin = roles.includes('admin');
-    this.isCoordenador = roles.includes('coordenador');
-    this.isProfessor = roles.includes('professor');
-    this.isAluno = roles.includes('aluno');
+    try {
+      const roles = this.keycloak.getUserRoles(true);
+      this.isAdmin = roles.includes('ADMIN');
+      this.isProfessor = roles.includes('PROFESSOR');
+      this.isAluno = roles.includes('ALUNO');
+
+    } catch (err) {
+      console.error('Erro ao obter roles do usuário:', err);
+    }
   }
 
-  async logout() {
-    await this.keycloak.logout(window.location.origin);
+  logout() {
+    this.keycloak.logout(window.location.origin);
   }
 }

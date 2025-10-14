@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
-public abstract class BaseService<D,RP extends BaseRepositoryPort<D, Long>> {
+public abstract class BaseService<D, RP extends BaseRepositoryPort<D, DT, Long>, DT> {
 
     private final RP repositorio;
     public Optional<D> buscarPorIdentifier(Long identifier) {

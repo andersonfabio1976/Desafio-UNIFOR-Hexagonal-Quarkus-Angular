@@ -8,7 +8,9 @@ import br.com.unifor.adapters.repository.entity.ProfessorEntity;
 import br.com.unifor.domain.model.Aluno;
 import br.com.unifor.domain.model.Professor;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "cdi")
 public interface ProfessorMapper extends BaseMapper<ProfessorEntity, Professor, ProfessorDTO> {
+
 }

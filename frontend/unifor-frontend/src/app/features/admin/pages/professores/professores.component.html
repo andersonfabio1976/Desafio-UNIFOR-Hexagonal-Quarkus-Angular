@@ -1,81 +1,80 @@
-<mat-toolbar color="primary" class="page-toolbar">
-  <mat-icon>person</mat-icon>
-  <span>Gerenciamento de Professores</span>
-</mat-toolbar>
+<div class="page">
+  <mat-card class="form-card">
+    <mat-card-title>Cadastro de Professor</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <input type="hidden" formControlName="identifier" />
 
-<div class="page-container">
-  <mat-card class="mat-elevation-z4">
-    <mat-card-title>Cadastro de Professores</mat-card-title>
+        <div class="row">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" />
+            <mat-error *ngIf="f.nome.touched && f.nome.invalid">
+              Informe o nome (mínimo 2 caracteres)
+            </mat-error>
+          </mat-form-field>
 
-    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-container">
-      <mat-form-field>
-        <mat-label>Nome</mat-label>
-        <input matInput formControlName="nome" required />
-      </mat-form-field>
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="f.email.touched && f.email.invalid">
+              Informe um email válido
+            </mat-error>
+          </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" required />
-      </mat-form-field>
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Área</mat-label>
+            <input matInput formControlName="area" />
+            <mat-error *ngIf="f.area.touched && f.area.invalid">
+              Informe a área
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-      <mat-form-field>
-        <mat-label>Área</mat-label>
-        <input matInput formControlName="area" />
-      </mat-form-field>
+        <div class="row">
+          <mat-slide-toggle formControlName="coordenador">Coordenador</mat-slide-toggle>
+        </div>
 
-      <mat-slide-toggle formControlName="coordenador">Coordenador</mat-slide-toggle>
-
-      <button mat-raised-button color="primary" type="submit">
-        <mat-icon>save</mat-icon> Salvar
-      </button>
-    </form>
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="saving">
+            {{ form.value.identifier ? 'Atualizar' : 'Incluir' }}
+          </button>
+          <button mat-button type="button" (click)="cancelarEdicao()">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
   </mat-card>
 
-  <mat-card class="mat-elevation-z4">
+  <mat-card class="list-card">
     <mat-card-title>Lista de Professores</mat-card-title>
-
-    <table mat-table [dataSource]="professores" class="mat-elevation-z2 full-width-table">
-      <ng-container matColumnDef="identifier">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let p">{{ p.identifier }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="nome">
-        <th mat-header-cell *matHeaderCellDef>Nome</th>
-        <td mat-cell *matCellDef="let p">{{ p.nome }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let p">{{ p.email }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="area">
-        <th mat-header-cell *matHeaderCellDef>Área</th>
-        <td mat-cell *matCellDef="let p">{{ p.area }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="coordenador">
-        <th mat-header-cell *matHeaderCellDef>Coord.</th>
-        <td mat-cell *matCellDef="let p">
-          <mat-slide-toggle
-            [checked]="p.coordenador"
-            (change)="toggleCoordenador($event, p)">
-          </mat-slide-toggle>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="acoes">
-        <th mat-header-cell *matHeaderCellDef>Ações</th>
-        <td mat-cell *matCellDef="let p">
-          <button mat-icon-button color="warn" (click)="remover(p.identifier)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+    <div class="table-wrap" *ngIf="!loading; else loadingTpl">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Área</th>
+          <th>Coordenador</th>
+          <th style="width: 160px;">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let p of professores">
+          <td>{{ p.nome }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ p.area }}</td>
+          <td>{{ p.coordenador ? 'Sim' : 'Não' }}</td>
+          <td class="actions-cell">
+            <a class="link" (click)="editar(p)">Editar</a>
+            <span class="sep">|</span>
+            <a class="danger" (click)="excluir(p)">Excluir</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #loadingTpl>
+      <div class="loading">Carregando...</div>
+    </ng-template>
   </mat-card>
 </div>

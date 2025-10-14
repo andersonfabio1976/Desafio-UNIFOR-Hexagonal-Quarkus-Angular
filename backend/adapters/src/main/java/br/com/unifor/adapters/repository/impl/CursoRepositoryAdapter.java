@@ -1,5 +1,6 @@
 package br.com.unifor.adapters.repository.impl;
 
+import br.com.unifor.adapters.dto.CursoDTO;
 import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.adapters.repository.entity.CursoEntity;
 import br.com.unifor.application.port.repository.CursoRepositoryPort;
@@ -8,14 +9,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.NoArgsConstructor;
 
 @ApplicationScoped
-public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, Curso>
+public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, Curso, CursoDTO>
         implements CursoRepositoryPort {
 
     private final CursoMapper mapper;
 
     @jakarta.inject.Inject
     public CursoRepositoryAdapter(CursoMapper mapper) {
-        super(mapper::toDomainFromEntity, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
 }

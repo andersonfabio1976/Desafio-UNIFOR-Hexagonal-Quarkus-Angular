@@ -1,17 +1,25 @@
 package br.com.unifor.core.infraestructure;
 
+//import io.smallrye.config.ConfigMapping;
+//import io.smallrye.config.WithName;
+//import io.quarkus.arc.properties.IfBuildProperty;
 //import jakarta.enterprise.context.ApplicationScoped;
-//import lombok.Getter;
-//import lombok.Setter;
-//import org.eclipse.microprofile.config.inject.ConfigProperties;
-//
-//@Getter
-//@Setter
+//@ConfigMapping(prefix = "quarkus.oidc")
 //@ApplicationScoped
-//@ConfigProperties(prefix = "quarkus.oidc")
-//public class OidcConfiguration {
-//    private String authServerUrl;
-//    private String clientId;
-//    private String credentialsSecret;
-//    private String applicationType;
+//@IfBuildProperty(name = "app.security.enabled", stringValue = "true", enableIfMissing = false)
+//public interface OidcConfiguration {
+//    @WithName("auth-server-url")
+//    String authServerUrl();
+//
+//    @WithName("client-id")
+//    String clientId();
+//
+//    @WithName("application-type")
+//    String applicationType();
+//
+//    Credentials credentials();
+//
+//    interface Credentials {
+//        String secret();
+//    }
 //}

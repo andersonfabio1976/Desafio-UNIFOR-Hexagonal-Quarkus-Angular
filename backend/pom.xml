@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>br.com.unifor</groupId>
@@ -16,19 +15,8 @@
         <module>adapters</module>
     </modules>
 
+    <!-- NENHUMA extensão de segurança aqui por padrão -->
     <dependencies>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-oidc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-security</artifactId>
-        </dependency>
     </dependencies>
 
     <properties>
@@ -56,7 +44,6 @@
                 <artifactId>adapters</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
-
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -78,6 +65,32 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+<!--    <profiles>-->
+<!--        <profile>-->
+<!--            <id>auth</id>-->
+<!--            <activation>-->
+<!--                <property>-->
+<!--                    <name>auth</name>-->
+<!--                    <value>false</value>-->
+<!--                </property>-->
+<!--            </activation>-->
+<!--            <dependencies>-->
+<!--                <dependency>-->
+<!--                    <groupId>io.quarkus</groupId>-->
+<!--                    <artifactId>quarkus-oidc</artifactId>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>io.quarkus</groupId>-->
+<!--                    <artifactId>quarkus-smallrye-jwt</artifactId>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>io.quarkus</groupId>-->
+<!--                    <artifactId>quarkus-security</artifactId>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+<!--        </profile>-->
+<!--    </profiles>-->
 
     <build>
         <pluginManagement>

@@ -1,33 +1,29 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AdminRoutingModule } from './admin-routing.module';
-import { MaterialModule } from 'src/app/shared/material.module';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
-// Páginas
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
 import { AdminHomeComponent } from './admin-home.component';
-import { AlunosComponent } from './pages/alunos/alunos.component';
-import { CursosComponent } from './pages/cursos/cursos.component';
-import { ProfessoresComponent } from './pages/professores/professores.component';
-import { MatriculasComponent } from './pages/matriculas/matriculas.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { AdminRoutingModule } from './admin-routing.module';
+import { AdminWelcomeComponent } from './admin-welcome.component';
 
 @NgModule({
   declarations: [
     AdminHomeComponent,
-    AlunosComponent,
-    CursosComponent,
-    ProfessoresComponent,
-    MatriculasComponent,
-    UsuariosComponent
+    AdminWelcomeComponent
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AdminRoutingModule,
-    MaterialModule
-  ],
-  providers: [DatePipe]
+    RouterModule,        // habilita <router-outlet> e diretivas de roteamento
+    MatSidenavModule,    // habilita mat-sidenav(-container/-content)
+    MatListModule,       // habilita mat-nav-list
+    MatButtonModule,
+    MatCardModule,
+    AdminRoutingModule   // registra as rotas filhas do admin
+  ]
 })
 export class AdminModule {}
