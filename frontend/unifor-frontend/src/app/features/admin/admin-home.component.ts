@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
-  template: `
-    <h2>Administração</h2>
-    <ul>
-      <li>Matricular Alunos</li>
-      <li>Criar Professores</li>
-      <li>Atribuir/Remover Coordenador</li>
-    </ul>
-  `,
+  selector: 'app-admin-home',
+  templateUrl: './admin-home.component.html',
+  styleUrls: ['./admin-home.component.scss']
 })
-export class AdminHomeComponent {}
+export class AdminHomeComponent {
+  constructor(private keycloak: KeycloakService) {}
+
+  logout() {
+    this.keycloak.logout(window.location.origin);
+  }
+}

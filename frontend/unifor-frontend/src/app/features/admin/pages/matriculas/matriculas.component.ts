@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-matriculas',
-  templateUrl: './matriculas.component.html',
-  styleUrls: ['./matriculas.component.scss']
+  template: '<h1>CRUD de Matriculas</h1>'
 })
-export class MatriculasComponent {
-
-}
+export class MatriculasComponent {}

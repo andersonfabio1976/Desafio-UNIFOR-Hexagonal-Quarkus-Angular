@@ -1,22 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomeComponent } from './admin-home.component';
-import { AlunosComponent } from './pages/alunos/alunos.component';
-import { CursosComponent } from './pages/cursos/cursos.component';
-import { ProfessoresComponent } from './pages/professores/professores.component';
-import { MatriculasComponent } from './pages/matriculas/matriculas.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminHomeComponent,
     children: [
-      { path: 'alunos', component: AlunosComponent },
-      { path: 'cursos', component: CursosComponent },
-      { path: 'professores', component: ProfessoresComponent },
-      { path: 'matriculas', component: MatriculasComponent },
-      { path: 'usuarios', component: UsuariosComponent },
+      { path: 'alunos', loadChildren: () => import('./pages/alunos/alunos.module').then(m => m.AlunosModule) },
+      { path: 'professores', loadChildren: () => import('./pages/professores/professores.module').then(m => m.ProfessoresModule) },
+      { path: 'cursos', loadChildren: () => import('./pages/cursos/cursos.module').then(m => m.CursosModule) },
+      { path: 'matriculas', loadChildren: () => import('./pages/matriculas/matriculas.module').then(m => m.MatriculasModule) },
+      { path: 'semestres', loadChildren: () => import('./pages/semestres/semestres.module').then(m => m.SemestresModule) },
       { path: '', redirectTo: 'alunos', pathMatch: 'full' }
     ]
   }
