@@ -5,5 +5,6 @@ export const environment = {
     realm: 'unifor-realm',
     clientId: 'unifor-frontend',
   },
-  apiUrl: 'http://localhost:8081'
+  // Backend exposto pelo docker-compose: host 8081 -> container 8080
+  apiUrl: 'http://localhost:8081',
 };

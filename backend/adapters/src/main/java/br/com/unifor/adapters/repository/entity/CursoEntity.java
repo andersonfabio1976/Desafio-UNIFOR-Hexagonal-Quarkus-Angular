@@ -19,9 +19,9 @@ public class CursoEntity extends AuditableEntity {
 
     private String nome;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "curso")
     private List<DisciplinaEntity> disciplinas;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "curso")
     private List<SemestreEntity> semestres;
 }

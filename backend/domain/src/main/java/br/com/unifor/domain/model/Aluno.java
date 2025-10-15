@@ -1,9 +1,7 @@
 package br.com.unifor.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,14 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Builder
-public class Aluno {
-    private Long identifier;
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Aluno extends AuditableModel {
     private String nome;
     private String email;
     private LocalDate dataNascimento;
-    private Instant createdOn;
-    private Instant updatedOn;
+    private Usuario usuario;
 
     @Builder.Default
     private List<Matricula> matriculas = new ArrayList<>();

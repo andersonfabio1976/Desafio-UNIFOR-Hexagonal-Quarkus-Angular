@@ -1,16 +1,17 @@
 package br.com.unifor.adapters.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
 @SuperBuilder
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract  class AuditableEntity {
 
     @Id
@@ -18,7 +19,6 @@ public abstract  class AuditableEntity {
     private Long identifier;
     private Instant createdOn;
     private Instant updatedOn;
-
 
     @PrePersist
     protected void onCreate() {

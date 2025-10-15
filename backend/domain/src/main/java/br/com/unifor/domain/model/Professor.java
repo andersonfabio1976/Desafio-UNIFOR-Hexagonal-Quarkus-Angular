@@ -1,9 +1,7 @@
 package br.com.unifor.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.List;
@@ -11,14 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Builder
-public class Professor {
-    private Long identifier;
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Professor extends AuditableModel {
     private String nome;
     private Boolean coordenador;
     private String email;
     private String area;
     private List<Disciplina> disciplinas;
-    private Instant createdOn;
-    private Instant updatedOn;
+    private Usuario usuario;
 }

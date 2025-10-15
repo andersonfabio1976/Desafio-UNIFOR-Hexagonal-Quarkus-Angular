@@ -1,4 +1,4 @@
-package br.com.unifor.core.infraestructure;
+package br.com.unifor.infraestructure.keycloack;
 
 //import jakarta.enterprise.context.ApplicationScoped;
 //import lombok.Getter;

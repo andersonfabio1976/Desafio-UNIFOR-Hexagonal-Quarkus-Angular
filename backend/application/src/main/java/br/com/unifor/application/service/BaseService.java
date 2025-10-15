@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
-public abstract class BaseService<D,RP extends BaseRepositoryPort<D, Long>> {
+public abstract class BaseService<D, RP extends BaseRepositoryPort<D, Long>> {
 
     private final RP repositorio;
     public Optional<D> buscarPorIdentifier(Long identifier) {
@@ -25,7 +25,13 @@ public abstract class BaseService<D,RP extends BaseRepositoryPort<D, Long>> {
     }
 
     @Transactional
+    public void atualizar(D domain, Long identifier) {
+        repositorio.atualizar(domain, identifier);
+    }
+
+    @Transactional
     public boolean excluirPorIdentifier(Long identifier) {
         return repositorio.excluirPorIdentifier(identifier);
     }
+
 }

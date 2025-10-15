@@ -8,6 +8,16 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "architect" : {
+          "build" : {
+            "options" : {
+              "allowedCommonJsDependencies" : [
+                "base64-js",
+                "js-sha256"
+              ]
+            }
+          }
         }
       },
       "root": "",
