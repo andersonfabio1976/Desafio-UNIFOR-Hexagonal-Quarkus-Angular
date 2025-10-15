@@ -1,9 +1,11 @@
+import { UsuarioDTO } from '../usuario/usuario.dto';
+import {CursosDTO} from "../cursos/cursos.dto"
+
 export interface AlunoDTO {
   identifier?: number;
   nome: string;
   email: string;
-  dataNascimento: string; // yyyy-mm-dd
-  matriculas?: any[]; // pode ser detalhado depois
-  createdOn?: string; // ISO string
-  updatedOn?: string; // ISO string
+  dataNascimento: string;
+  usuario: UsuarioDTO;
+  curso?: CursosDTO;
 }

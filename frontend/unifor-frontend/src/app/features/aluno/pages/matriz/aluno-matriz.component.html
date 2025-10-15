@@ -1,0 +1,46 @@
+<mat-card class="matriz-card" appearance="outlined">
+  <div class="header">
+    <h2 class="title">Matriz Curricular (Aluno)</h2>
+    <div class="legend">
+      <span class="chip approved">Aprovada</span>
+      <span class="chip progress">Em andamento</span>
+      <span class="chip pending">Pendente</span>
+    </div>
+  </div>
+
+  <!-- Skeleton enquanto carrega -->
+  <div *ngIf="loading" class="skeleton">
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+  </div>
+
+  <div class="grid header-row" role="row">
+    <div class="cell h">Período</div>
+    <div class="cell h">Disciplina</div>
+    <div class="cell h">Carga Horária</div>
+    <div class="cell h">Responsável</div>
+    <div class="cell h right">Status</div>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="(rows$ | async) as rows; else empty">
+      <div *ngFor="let r of rows; trackBy: trackByRow" class="grid body-row" role="row">
+        <div class="cell">{{ r.periodo }}º</div>
+        <div class="cell strong">{{ r.disciplina }}</div>
+        <div class="cell">{{ r.cargaHoraria }}h</div>
+        <div class="cell">{{ r.responsavel }}</div>
+        <div class="cell right">
+          <span [class]="statusClass(r.status)">{{ r.status || '-' }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="empty">
+      <mat-icon>info</mat-icon>
+      <span>Nenhum item encontrado para sua matriz.</span>
+    </div>
+  </ng-template>
+</mat-card>

@@ -1,58 +1,94 @@
-.page-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  font-weight: 600;
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 50px;
 }
 
-.page-container {
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+/* Container do componente — sem limites/margens extras */
+.container {
+  width: 100%;
+  max-width: 92%;
+  margin: 0;
+  padding: 0;      /* respiro vem do mat-sidenav-content (16 ESQ, 24 DIR) */
+  box-sizing: border-box;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  min-width: 0;    /* impede overflow lateral */
 }
 
+/* Cards 100% com separação vertical */
 mat-card {
-  padding: 20px;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 16px 0;
+  box-sizing: border-box;
 }
 
-mat-card-title {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #1565c0;
-}
-
-.form-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: flex-end;
+/* Formulário — Grid responsivo sem ultrapassar 100% */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 mat-form-field {
-  flex: 1;
-  min-width: 200px;
-}
-
-button[type="submit"] {
-  height: 56px;
-  align-self: flex-end;
-}
-
-.full-width-table {
   width: 100%;
-  border-radius: 8px;
+  min-width: 0; /* inputs não “esticam” a coluna */
+}
+
+/* Botões */
+.button-area {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.button-area button {
+  min-width: 120px;
+}
+
+/* Tabela — correção definitiva de overflow:
+   - container rola horizontalmente se precisar
+   - table layout fixed: células não expandem o layout
+   - sem larguras percentuais que somam com padding
+*/
+.table-alunos {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow-x: auto;                /* se precisar, rola dentro do card */
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-alunos .mat-mdc-table,
+.table-alunos table,
+.table-alunos .mat-table,
+.table-alunos .cdk-table {
+  width: 100% !important;
+  table-layout: fixed !important;  /* CHAVE para não “empurrar” largura */
+  border-collapse: collapse;
+}
+
+/* Células não expandem; cortam com reticência se preciso */
+.table-alunos th,
+.table-alunos td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-th.mat-header-cell {
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
-}
-
-tr.mat-row:hover {
-  background-color: #e3f2fd;
+/* Removidas larguras percentuais fixas nas colunas para não somar com padding */
+@media (max-width: 768px) {
+  .table-alunos {
+    overflow-x: auto;
+  }
 }

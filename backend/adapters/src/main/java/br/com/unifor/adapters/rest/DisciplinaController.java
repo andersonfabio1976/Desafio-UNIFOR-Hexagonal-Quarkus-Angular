@@ -1,20 +1,24 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.DisciplinaDTO;
+import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.DisciplinaMapper;
 import br.com.unifor.application.service.DisciplinaService;
 import br.com.unifor.domain.model.Disciplina;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
-@Path("/cursos/{identifierCurso}/disciplinas")
+@Path("/Disciplinas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
+//@RolesAllowed({"ADMIN", "ROLE_ADMIN", "ROLE_ADMINISTRADOR"})
+@PermitAll
 public class DisciplinaController {
 
     @Inject
@@ -24,37 +28,50 @@ public class DisciplinaController {
     DisciplinaMapper mapper;
 
     @GET
-    public Response listar(@PathParam("identifierCurso") Long identifierCurso) {
-        List<DisciplinaDTO> disciplinas = service.listarPorCurso(identifierCurso)
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
-        return Response.ok(disciplinas).build();
+    public List<DisciplinaDTO> listarTodos() {
+        return mapper.toListDTO(service.listarTodos());
     }
 
     @GET
-    @Path("/{identifierDisciplina}")
-    public Response buscarPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                @PathParam("identifierDisciplina") Long identifierDisciplina) {
-        return service.buscarPorIdentifier(identifierCurso, identifierDisciplina)
+    @Path("/{identifier}")
+    public DisciplinaDTO buscarPorIdentifier(@PathParam("identifier") Long identifier) {
+        return service.buscarPorIdentifier(identifier)
                 .map(mapper::toDTO)
-                .map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND))
-                .build();
+                .orElseThrow(() -> new NotFoundException("Disciplina não encontrado"));
     }
 
     @POST
-    public Response salvar(@PathParam("identifierCurso") Long identifierCurso, DisciplinaDTO dto) {
-        Disciplina disciplina = mapper.toDomainFromDTO(dto);
-        service.salvar(identifierCurso, disciplina);
-        return Response.status(Response.Status.CREATED).build();
+    @Transactional
+    public Response salvar(DisciplinaDTO dto) {
+        Disciplina dominio = mapper.toDomainFromDTO(dto);
+        service.salvar(dominio);
+        DisciplinaDTO resposta = mapper.toDTO(dominio);
+
+        if (dto.getIdentifier() == null && resposta.getIdentifier() != null) {
+            return Response
+                    .created(URI.create("/Disciplinas/" + resposta.getIdentifier()))
+                    .entity(resposta)
+                    .build();
+        }
+        return Response.ok(resposta).build();
+    }
+
+    @PUT
+    @Path("/{identifier}")
+    @Transactional
+    public Response atualizar(@PathParam("identifier") Long identifier, DisciplinaDTO dto) {
+        service.atualizar(mapper.toDomainFromDTO(dto), identifier);
+        return Response.ok(dto).build();
     }
 
     @DELETE
-    @Path("/{identifierDisciplina}")
-    public Response removerPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                 @PathParam("identifierDisciplina") Long identifierDisciplina) {
-        boolean removido = service.excluirPorIdentifier(identifierCurso, identifierDisciplina);
-        return removido ? Response.noContent().build() : Response.status(Response.Status.NOT_FOUND).build();
+    @Path("/{identifier}")
+    @Transactional
+    public Response removerPorIdentifier(@PathParam("identifier") Long identifier) {
+        boolean removido = service.excluirPorIdentifier(identifier);
+        if (!removido) {
+            throw new NotFoundException("Disciplina não encontrado");
+        }
+        return Response.noContent().build();
     }
 }
