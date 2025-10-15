@@ -1,9 +1,7 @@
 package br.com.unifor.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,12 +10,11 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Builder
-public class Semestre {
-    private Long identifier;
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Semestre extends AuditableModel {
     private int numero;
-    private Instant createdOn;
-    private Instant updatedOn;
 
     @Builder.Default
     private List<Disciplina> disciplinas = new ArrayList<>();

@@ -19,7 +19,7 @@ public class SemestreEntity extends AuditableEntity {
 
     private int numero;
 
-    @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "semestre")
     private List<MatriculaEntity> matriculas;
 
     @OneToMany(mappedBy = "semestre")

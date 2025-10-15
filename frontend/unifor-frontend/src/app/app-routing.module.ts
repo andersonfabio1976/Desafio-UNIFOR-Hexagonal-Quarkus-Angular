@@ -2,44 +2,36 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { AdminGuard } from './core/auth/admin.guard';
+import { CoordenadorGuard } from './core/auth/coordenador.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'admin', pathMatch: 'full' }, // 👈 redirecionamento inicial
+
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'admin', pathMatch: 'full' },
       {
         path: 'admin',
         canActivate: [AdminGuard],
-        canActivateChild: [AdminGuard],
-        data: { roles: ['ADMIN'] },
         loadChildren: () =>
           import('./features/admin/admin.module').then((m) => m.AdminModule),
       },
-      // Remova as rotas de professor e aluno se não tiver módulos e guards próprios
-      // {
-      //   path: 'professor',
-      //   loadChildren: () =>
-      //     import('./features/admin/pages/professores/professores.module').then((m) => m.ProfessoresModule),
-      // },
-      // {
-      //   path: 'aluno',
-      //   loadChildren: () =>
-      //     import('./features/admin/pages/alunos/alunos.module').then((m) => m.AlunosModule),
-      // },
+      {
+        path: 'coord',
+        canActivate: [CoordenadorGuard],
+        loadChildren: () =>
+          import('./features/coordenador/coordenador.module').then(
+            (m) => m.CoordenadorModule
+          ),
+      },
     ],
   },
-  {
-    path: 'acesso-negado',
-    loadChildren: () =>
-      import('./features/access-denied/access-denied.module').then((m) => m.AccessDeniedModule),
-  },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'admin' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

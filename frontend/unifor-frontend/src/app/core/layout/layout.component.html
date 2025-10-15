@@ -1,1 +1,49 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+    <div class="sidebar">
+      <h3>Painel Admin</h3>
+
+      <ng-container *ngIf="hasRole('ADMIN')">
+        <button mat-button routerLink="/admin/alunos" routerLinkActive="active">
+          Alunos
+        </button>
+        <button
+          mat-button
+          routerLink="/admin/professores"
+          routerLinkActive="active"
+        >
+          Professores
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="hasRole('COORDENADOR')">
+        <button
+          mat-button
+          routerLink="/coord/semestres"
+          routerLinkActive="active"
+        >
+          Semestres
+        </button>
+        <button mat-button routerLink="/coord/cursos" routerLinkActive="active">
+          Cursos
+        </button>
+        <button
+          mat-button
+          routerLink="/coord/disciplinas"
+          routerLinkActive="active"
+        >
+          Disciplinas
+        </button>
+        <button mat-button routerLink="/coord/matriz" routerLinkActive="active">
+          Matriz Curricular
+        </button>
+      </ng-container>
+
+      <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

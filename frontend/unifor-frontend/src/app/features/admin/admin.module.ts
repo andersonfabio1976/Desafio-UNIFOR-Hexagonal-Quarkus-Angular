@@ -1,21 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminHomeComponent } from './admin-home.component';
+import { RouterModule } from '@angular/router';
 import { AdminRoutingModule } from './admin-routing.module';
+import { AlunosModule } from './pages/alunos/alunos.module';
+import { MaterialModule } from '../../shared/material.module';
 
-// IMPORTS DO ANGULAR MATERIAL
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
+import { AdminHomeComponent } from './admin-home.component';
+import { AdminWelcomeComponent } from './admin-welcome.component';
 
 @NgModule({
-  declarations: [AdminHomeComponent],
+  declarations: [
+    AdminHomeComponent,
+    AdminWelcomeComponent
+  ],
   imports: [
     CommonModule,
+    RouterModule,
     AdminRoutingModule,
-    MatSidenavModule,
-    MatListModule,
-    MatButtonModule,
-  ]
+    AlunosModule,
+    MaterialModule, // 👈 adiciona os componentes do Angular Material
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

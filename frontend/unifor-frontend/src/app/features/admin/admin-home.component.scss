@@ -1,52 +1,87 @@
+:host {
+  /* Tamanho base dos itens do menu e do título */
+  --admin-menu-font-size: 14px;
+}
+
+/* Layout geral */
 .admin-sidenav-container {
-  height: 100vh;
+  height: 100%;
 }
 
 .admin-sidenav {
-  width: 230px;
-  background: #1976d2; // azul Material
+  width: 260px;
+  background: #1976d2; /* Azul */
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding-top: 8px;
+}
+
+/* Cabeçalho do menu */
+.admin-sidenav__header {
+  padding: 8px 12px 4px;
 }
 
 .admin-logo {
   text-align: center;
-  padding: 24px 0 10px 0;
-  font-weight: bold;
-  background: #1976d2;
-  font-size: 22px;
+  font-weight: 700;                        /* negrito */
+  font-size: var(--admin-menu-font-size);  /* mesmo tamanho dos itens do menu */
+  line-height: 1.4;
+  letter-spacing: .3px;
   color: #fff;
 }
 
-mat-nav-list {
-  flex: 1;
-  padding: 0 0 0 0;
-  background: #1976d2;
+/* Lista do menu */
+.admin-menu {
+  padding-top: 8px;
 }
 
-a.mat-list-item {
-  color: #fff !important;
-  font-weight: 500;
-  transition: background 0.2s, color 0.2s;
-  border-radius: 0 20px 20px 0;
-  margin-right: 10px;
+/* Ajustes de cores e tamanhos dentro do Angular Material (MD3) */
+:host ::ng-deep .admin-sidenav .mat-mdc-list-item {
+  color: #fff;
+  --mdc-list-list-item-label-text-color: #fff;
+  --mdc-list-list-item-hover-state-layer-color: rgba(255,255,255,.08);
+  --mdc-list-list-item-focus-state-layer-color: rgba(255,255,255,.12);
+  --mdc-list-list-item-activated-state-layer-color: rgba(255,255,255,.16);
+  --mdc-list-list-item-selected-container-color: rgba(255,255,255,.16);
 }
-a.mat-list-item.active-link,
-a.mat-list-item.cdk-focused,
-a.mat-list-item:hover {
-  background-color: #1565c0 !important; // azul mais escuro no hover
-  color: #fff !important;
+
+:host ::ng-deep .admin-sidenav a.mat-mdc-list-item {
+  font-size: var(--admin-menu-font-size);
+  border-radius: 4px;
+  margin: 2px 8px;
+  padding: 0 12px;
+}
+
+:host ::ng-deep .admin-sidenav a.mat-mdc-list-item:hover {
+  background: rgba(255,255,255,.08);
+}
+
+:host ::ng-deep .admin-sidenav a.mat-mdc-list-item.active {
+  background: rgba(255,255,255,.16);
+  font-weight: 600;
+}
+
+/* Rodapé com botão centralizado */
+.admin-sidenav__footer {
+  margin-top: auto;               /* empurra o footer para o rodapé */
+  padding: 12px 8px 16px;
+  display: flex;
+  justify-content: center;        /* centraliza o botão */
 }
 
 .logout-btn {
-  margin: 24px 20px 16px 20px;
-  font-weight: bold;
+  min-width: 140px;
+  justify-content: center;
 }
 
+/* Conteúdo principal */
 .admin-main {
-  background: #f6f7fa;
-  min-height: 100vh;
-  padding: 32px;
+  padding: 16px;
+}
+
+@media (max-width: 960px) {
+  .admin-main {
+    padding: 12px;
+  }
 }

@@ -20,6 +20,10 @@ public class ProfessorEntity extends AuditableEntity {
     private String area;
     private Boolean coordenador;
 
-    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "usuario_identifier")
+    private UsuarioEntity usuario;
+
+    @OneToMany(mappedBy = "professor")
     private List<DisciplinaEntity> disciplinas;
 }

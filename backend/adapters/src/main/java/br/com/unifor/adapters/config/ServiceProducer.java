@@ -6,34 +6,17 @@ import br.com.unifor.application.port.repository.*;
 import br.com.unifor.application.service.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ServiceProducer {
 
-    private final AlunoMapper alunoMapper;
-    private final CursoMapper cursoMapper;
-    private final ProfessorMapper professorMapper;
-    private final SemestreMapper semestreMapper;
-    private final MatriculaMapper matriculaMapper;
-    private final DisciplinaMapper disciplinaMapper;
-
-
-    public ServiceProducer(
-            AlunoMapper alunoMapper,
-            CursoMapper cursoMapper,
-            ProfessorMapper professorMapper,
-            SemestreMapper semestreMapper,
-            MatriculaMapper matriculaMapper,
-            DisciplinaMapper disciplinaMapper
-    ) {
-        this.alunoMapper = alunoMapper;
-        this.cursoMapper = cursoMapper;
-        this.professorMapper = professorMapper;
-        this.semestreMapper = semestreMapper;
-        this.matriculaMapper = matriculaMapper;
-        this.disciplinaMapper = disciplinaMapper;
-
-    }
+    @Inject AlunoMapper alunoMapper;
+    @Inject CursoMapper cursoMapper;
+    @Inject ProfessorMapper professorMapper;
+    @Inject SemestreMapper semestreMapper;
+    @Inject MatriculaMapper matriculaMapper;
+    @Inject DisciplinaMapper disciplinaMapper;
 
     @Produces
     public AlunoService alunoService() {

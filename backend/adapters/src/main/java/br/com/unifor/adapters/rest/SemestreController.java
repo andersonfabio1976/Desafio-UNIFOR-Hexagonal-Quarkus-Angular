@@ -1,20 +1,24 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.SemestreDTO;
+import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.SemestreMapper;
 import br.com.unifor.application.service.SemestreService;
 import br.com.unifor.domain.model.Semestre;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
-@Path("/cursos/{idCurso}/semestres")
+@Path("/Semestres")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
+//@RolesAllowed({"ADMIN", "ROLE_ADMIN", "ROLE_ADMINISTRADOR"})
+@PermitAll
 public class SemestreController {
 
     @Inject
@@ -24,37 +28,50 @@ public class SemestreController {
     SemestreMapper mapper;
 
     @GET
-    public Response listar(@PathParam("identifierCurso") Long identifierCurso) {
-        List<SemestreDTO> semestres = service.listarPorCurso(identifierCurso)
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
-        return Response.ok(semestres).build();
+    public List<SemestreDTO> listarTodos() {
+        return mapper.toListDTO(service.listarTodos());
     }
 
     @GET
-    @Path("/{identifierSemestre}")
-    public Response buscarPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                @PathParam("identifierSemestre") Long identifierSemestre) {
-        return service.buscarPorIdentifier(identifierCurso, identifierSemestre)
+    @Path("/{identifier}")
+    public SemestreDTO buscarPorIdentifier(@PathParam("identifier") Long identifier) {
+        return service.buscarPorIdentifier(identifier)
                 .map(mapper::toDTO)
-                .map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND))
-                .build();
+                .orElseThrow(() -> new NotFoundException("Semestre não encontrado"));
     }
 
     @POST
-    public Response salvar(@PathParam("identifierCurso") Long identifierCurso, SemestreDTO dto) {
-        Semestre semestre = mapper.toDomainFromDTO(dto);
-        service.salvar(identifierCurso, semestre);
-        return Response.status(Response.Status.CREATED).build();
+    @Transactional
+    public Response salvar(SemestreDTO dto) {
+        Semestre dominio = mapper.toDomainFromDTO(dto);
+        service.salvar(dominio);
+        SemestreDTO resposta = mapper.toDTO(dominio);
+
+        if (dto.getIdentifier() == null && resposta.getIdentifier() != null) {
+            return Response
+                    .created(URI.create("/Semestres/" + resposta.getIdentifier()))
+                    .entity(resposta)
+                    .build();
+        }
+        return Response.ok(resposta).build();
+    }
+
+    @PUT
+    @Path("/{identifier}")
+    @Transactional
+    public Response atualizar(@PathParam("identifier") Long identifier, SemestreDTO dto) {
+        service.atualizar(mapper.toDomainFromDTO(dto), identifier);
+        return Response.ok(dto).build();
     }
 
     @DELETE
-    @Path("/{identifierSemestre}")
-    public Response removerPorIdentifier(@PathParam("identifierCurso") Long identifierCurso,
-                                 @PathParam("identifierSemestre") Long identifierSemestre) {
-        boolean removido = service.excluirPorIdentifier(identifierCurso, identifierSemestre);
-        return removido ? Response.noContent().build() : Response.status(Response.Status.NOT_FOUND).build();
+    @Path("/{identifier}")
+    @Transactional
+    public Response removerPorIdentifier(@PathParam("identifier") Long identifier) {
+        boolean removido = service.excluirPorIdentifier(identifier);
+        if (!removido) {
+            throw new NotFoundException("Semestre não encontrado");
+        }
+        return Response.noContent().build();
     }
 }
