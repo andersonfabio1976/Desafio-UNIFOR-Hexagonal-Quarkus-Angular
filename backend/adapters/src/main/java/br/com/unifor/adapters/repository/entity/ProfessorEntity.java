@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.util.List;
 
 @Entity
 @Table(name = "professor")
@@ -20,6 +19,8 @@ public class ProfessorEntity extends AuditableEntity {
     private String area;
     private Boolean coordenador;
 
-    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DisciplinaEntity> disciplinas;
+    @ManyToOne
+    @JoinColumn(name = "usuario_identifier")
+    private UsuarioEntity usuario;
+
 }

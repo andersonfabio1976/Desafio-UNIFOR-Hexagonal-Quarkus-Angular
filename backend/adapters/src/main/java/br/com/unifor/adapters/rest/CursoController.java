@@ -1,52 +1,77 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.CursoDTO;
+import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.application.service.CursoService;
 import br.com.unifor.domain.model.Curso;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
-@Path("/cursos")
+@Path("/Cursos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"ROLE_ADMIN", "ROLE_COORDENADOR"})
+//@RolesAllowed({"ADMIN", "ROLE_ADMINISTRADOR"})
+@PermitAll
 public class CursoController {
 
     @Inject
-    CursoService servico;
+    CursoService service;
 
     @Inject
     CursoMapper mapper;
 
     @GET
     public List<CursoDTO> listarTodos() {
-        return mapper.toDTO(servico.listarTodos());
+        return mapper.toListDTO(service.listarTodos());
     }
 
     @GET
     @Path("/{identifier}")
     public CursoDTO buscarPorIdentifier(@PathParam("identifier") Long identifier) {
-        return servico.buscarPorIdentifier(identifier)
+        return service.buscarPorIdentifier(identifier)
                 .map(mapper::toDTO)
                 .orElseThrow(() -> new NotFoundException("Curso não encontrado"));
     }
 
     @POST
     @Transactional
-    public void salvar(CursoDTO dto) {
-        Curso curso = mapper.toDomainFromEntity(mapper.toEntity(mapper.toDomainFromDTO(dto)));
-        servico.salvar(curso);
+    public Response salvar(CursoDTO dto) {
+        Curso dominio = mapper.toDomainFromDTO(dto);
+        service.salvar(dominio);
+        CursoDTO resposta = mapper.toDTO(dominio);
+
+        if (dto.getIdentifier() == null && resposta.getIdentifier() != null) {
+            return Response
+                    .created(URI.create("/Cursos/" + resposta.getIdentifier()))
+                    .entity(resposta)
+                    .build();
+        }
+        return Response.ok(resposta).build();
+    }
+
+    @PUT
+    @Path("/{identifier}")
+    @Transactional
+    public Response atualizar(@PathParam("identifier") Long identifier, CursoDTO dto) {
+        service.atualizar(mapper.toDomainFromDTO(dto), identifier);
+        return Response.ok(dto).build();
     }
 
     @DELETE
     @Path("/{identifier}")
     @Transactional
-    public boolean removerPorId(@PathParam("identifier") Long identifier) {
-        return servico.excluirPorIdentifier(identifier);
+    public Response removerPorIdentifier(@PathParam("identifier") Long identifier) {
+        boolean removido = service.excluirPorIdentifier(identifier);
+        if (!removido) {
+            throw new NotFoundException("Curso não encontrado");
+        }
+        return Response.noContent().build();
     }
 }

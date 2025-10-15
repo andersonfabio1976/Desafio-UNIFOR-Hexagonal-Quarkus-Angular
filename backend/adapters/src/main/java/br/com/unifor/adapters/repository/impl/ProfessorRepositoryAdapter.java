@@ -14,7 +14,7 @@ public class ProfessorRepositoryAdapter extends BaseRepositoryAdapter<ProfessorE
 
     @jakarta.inject.Inject
     public ProfessorRepositoryAdapter(ProfessorMapper mapper) {
-        super(mapper::toDomainFromEntity, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
 }

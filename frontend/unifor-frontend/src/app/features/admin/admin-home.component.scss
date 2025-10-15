@@ -1,52 +1,77 @@
+/* garante altura total */
+html, body, app-root, .admin-sidenav-container {
+  height: 100%;
+}
+
+/* container principal do layout */
 .admin-sidenav-container {
   height: 100vh;
 }
 
-.admin-sidenav {
-  width: 230px;
-  background: #1976d2; // azul Material
+/* IMPORTANTE: quem pinta o fundo do sidenav é o container interno */
+.admin-sidenav .mat-drawer-inner-container {
+  width: 220px;
+  background-color: #1565c0; /* azul */
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.admin-logo {
-  text-align: center;
-  padding: 24px 0 10px 0;
-  font-weight: bold;
-  background: #1976d2;
+/* título */
+.admin-title {
   font-size: 22px;
-  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
 }
 
-mat-nav-list {
+/* menu */
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  min-height: 0;
   flex: 1;
-  padding: 0 0 0 0;
-  background: #1976d2;
 }
 
-a.mat-list-item {
-  color: #fff !important;
-  font-weight: 500;
-  transition: background 0.2s, color 0.2s;
-  border-radius: 0 20px 20px 0;
-  margin-right: 10px;
-}
-a.mat-list-item.active-link,
-a.mat-list-item.cdk-focused,
-a.mat-list-item:hover {
-  background-color: #1565c0 !important; // azul mais escuro no hover
-  color: #fff !important;
+.admin-menu a.mat-button {
+  display: block;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
 
-.logout-btn {
-  margin: 24px 20px 16px 20px;
-  font-weight: bold;
+.admin-menu a:hover,
+.admin-menu a.active {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-.admin-main {
-  background: #f6f7fa;
-  min-height: 100vh;
-  padding: 32px;
+/* empurra o botão sair para o rodapé */
+.menu-spacer {
+  flex: 1 1 auto;
+}
+
+.admin-menu button {
+  width: 80%;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* área do conteúdo ocupa 100% */
+.admin-content {
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: #f7f7f7;
 }

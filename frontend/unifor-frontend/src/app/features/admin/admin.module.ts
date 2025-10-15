@@ -1,21 +1,45 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminHomeComponent } from './admin-home.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { AdminRoutingModule } from './admin-routing.module';
 
-// IMPORTS DO ANGULAR MATERIAL
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
+// Páginas
+import { AlunosComponent } from './pages/alunos/alunos.component';
+import { ProfessoresComponent } from './pages/professores/professores.component';
+
+// Angular Material
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
-  declarations: [AdminHomeComponent],
+  declarations: [
+    AlunosComponent,
+    ProfessoresComponent
+  ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     AdminRoutingModule,
-    MatSidenavModule,
-    MatListModule,
+
+    // Material
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCheckboxModule // <-- necessário para <mat-checkbox>
   ]
 })
-export class AdminModule { }
+export class AdminModule {}

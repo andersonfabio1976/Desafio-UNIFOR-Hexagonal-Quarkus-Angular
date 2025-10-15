@@ -1,1 +1,52 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container class="app-sidenav-container">
+  <!-- Painel lateral fixo (azul) -->
+  <mat-sidenav mode="side" class="app-sidenav" opened [disableClose]="true">
+    <mat-nav-list class="side-nav-list">
+      <!-- ADMIN -->
+      <ng-container *ngIf="showAdminSection()">
+        <div mat-subheader class="section-title">Painel Administrador</div>
+        <a mat-list-item class="nav-item" routerLink="/admin/alunos" routerLinkActive="active">Alunos</a>
+        <a mat-list-item class="nav-item" routerLink="/admin/professores" routerLinkActive="active">Professores</a>
+        <a mat-list-item class="nav-item" (click)="auth.logout()">Sair</a>
+        <mat-divider></mat-divider>
+      </ng-container>
+
+      <!-- COORDENADOR -->
+      <ng-container *ngIf="showCoordSection()">
+        <div mat-subheader class="section-title">Painel Coordenador</div>
+        <a mat-list-item class="nav-item" routerLink="/coord/disciplinas" routerLinkActive="active">Disciplinas</a>
+        <a mat-list-item class="nav-item" routerLink="/coord/cursos" routerLinkActive="active">Cursos</a>
+        <a mat-list-item class="nav-item" routerLink="/coord/semestres" routerLinkActive="active">Semestres</a>
+        <a mat-list-item class="nav-item" (click)="auth.logout()">Sair</a>
+        <mat-divider></mat-divider>
+      </ng-container>
+
+      <!-- Professor NÃO coordenador -->
+      <ng-container *ngIf="showProfessorSection()">
+        <div mat-subheader class="section-title">Professor</div>
+        <a mat-list-item class="nav-item" routerLink="/prof/matriz" routerLinkActive="active">Minha Matriz</a>
+        <a mat-list-item class="nav-item" (click)="auth.logout()">Sair</a>
+        <mat-divider></mat-divider>
+      </ng-container>
+
+      <!-- Aluno -->
+      <ng-container *ngIf="showAlunoSection()">
+        <div mat-subheader class="section-title">Aluno</div>
+        <a mat-list-item class="nav-item" routerLink="/aluno/matriz" routerLinkActive="active">Minha Matriz</a>
+        <a mat-list-item class="nav-item" (click)="auth.logout()">Sair</a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Conteúdo: toolbar padrão sem botão de menu -->
+  <mat-sidenav-content class="app-content">
+    <mat-toolbar color="primary" class="app-toolbar">
+      <span class="toolbar-title">UNIFOR</span>
+      <span class="spacer"></span>
+    </mat-toolbar>
+
+    <div class="app-router-outlet">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
