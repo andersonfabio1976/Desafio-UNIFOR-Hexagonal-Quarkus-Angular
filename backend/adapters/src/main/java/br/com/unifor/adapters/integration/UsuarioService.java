@@ -1,22 +1,28 @@
 package br.com.unifor.adapters.integration;
 
+import br.com.unifor.adapters.config.KeycloakAdminClientProvider;
 import br.com.unifor.adapters.dto.UsuarioDTO;
 import br.com.unifor.adapters.mapper.UsuarioMapper;
-import br.com.unifor.adapters.config.KeycloakAdminClientProvider;
+import br.com.unifor.adapters.repository.entity.UsuarioEntity;
 import br.com.unifor.domain.model.Usuario;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.jboss.logging.Logger;
+import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @ApplicationScoped
 public class UsuarioService {
+
+    private static final Logger LOG = Logger.getLogger(UsuarioService.class);
 
     @Inject
     UsuarioRepository usuarioRepository;
@@ -42,8 +48,9 @@ public class UsuarioService {
         user.setEnabled(true);
 
         var response = usersResource.create(user);
-        if (response.getStatus() != 201)
+        if (response.getStatus() != 201) {
             throw new RuntimeException("Falha ao criar usuário no Keycloak: " + response.getStatus());
+        }
 
         String keycloakId = response.getLocation().toString()
                 .substring(response.getLocation().toString().lastIndexOf("/") + 1);
@@ -59,7 +66,6 @@ public class UsuarioService {
 
         dto.setKeycloakIdentifier(keycloakId);
 
-        // ✅ Agora usa o repository injetado
         usuarioRepository.salvar(usuarioMapper.toDomainFromDTO(dto));
 
         return dto;
@@ -93,15 +99,44 @@ public class UsuarioService {
 
     @Transactional
     public void excluirUsuario(Long identifier) {
+        // Busca o usuário no banco
         Usuario usuario = usuarioRepository.buscarPorIdentifier(identifier)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
+        String kcId = safe(usuario.getKeycloakIdentifier());
         var kc = kcProvider.getKeycloak();
         String realm = kcProvider.getTargetRealm();
-        kc.realm(realm).users().delete(usuario.getKeycloakIdentifier());
+        UsersResource users = kc.realm(realm).users();
 
+        // Fallback: se o keycloakIdentifier não estiver salvo, tenta resolver por username/email
+        if (kcId.isBlank()) {
+            String username = safe(usuario.getUsername());
+            String email = safe(usuario.getEmail());
+
+            if (!username.isBlank()) {
+                kcId = tryResolveKeycloakIdBySearch(users, username, username);
+            }
+            if (kcId.isBlank() && !email.isBlank()) {
+                kcId = tryResolveKeycloakIdBySearch(users, email, username);
+            }
+        }
+
+        // Remove no Keycloak se tivermos o ID
+        if (!kcId.isBlank()) {
+            try {
+                users.get(kcId).remove();
+            } catch (Exception e) {
+                LOG.warnf(e, "Falha ao remover usuário no Keycloak (kcId=%s). Prosseguindo com remoção no banco.", kcId);
+            }
+        } else {
+            LOG.warnf("Keycloak ID não localizado (identifier=%s, username=%s, email=%s). Removendo apenas no banco.",
+                    identifier, usuario.getUsername(), usuario.getEmail());
+        }
+
+        // Remove do banco
         usuarioRepository.excluirPorIdentifier(identifier);
     }
+
 
     public Optional<Usuario> buscarPorUserNameRealm(String userName) {
         return usuarioRepository.buscarPorUserName(userName);
@@ -109,5 +144,30 @@ public class UsuarioService {
 
     public Optional<Usuario> buscarPorEmailRealm(String email) {
         return usuarioRepository.buscarPorEmail(email);
+    }
+
+    // ====== HELPERS ======
+
+    private static String tryResolveKeycloakIdBySearch(UsersResource users, String search, String usernameToMatch) {
+        try {
+            List<UserRepresentation> found = users.search(search, 0, 10);
+            if (found != null && !found.isEmpty()) {
+                if (usernameToMatch != null && !usernameToMatch.isBlank()) {
+                    for (UserRepresentation ur : found) {
+                        if (ur.getUsername() != null && ur.getUsername().equalsIgnoreCase(usernameToMatch)) {
+                            return ur.getId();
+                        }
+                    }
+                }
+                return found.get(0).getId();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UsuarioService.class).warnf(e, "Falha ao buscar usuário no Keycloak por '%s'", search);
+        }
+        return "";
+    }
+
+    private static String safe(String s) {
+        return s == null ? "" : s.trim();
     }
 }

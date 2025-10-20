@@ -20,17 +20,6 @@ public class Aluno extends AuditableModel {
     private LocalDate dataNascimento;
     private Usuario usuario;
 
-    @Builder.Default
-    private List<Matricula> matriculas = new ArrayList<>();
-
-    public void matricularCurso(Curso curso) {
-        if (curso == null) throw new IllegalArgumentException("Curso não pode ser nulo");
-        matriculas.add(Matricula.builder()
-                .aluno(this)
-                .curso(curso)
-                .statusMatricula(StatusMatricula.ATIVA)
-                .build());
-    }
 
     public boolean isMaiorDeIdade() {
         return dataNascimento.plusYears(18).isBefore(LocalDate.now());

@@ -1,7 +1,6 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.AlunoDTO;
-import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.dto.UsuarioDTO;
 import br.com.unifor.adapters.integration.UsuarioService;
 import br.com.unifor.adapters.mapper.AlunoMapper;
@@ -41,8 +40,6 @@ public class AlunoController {
         return mapper.toListDTO(service.listarTodos());
     }
 
-
-
     @GET
     @Path("/{identifier}")
     public AlunoDTO buscarPorIdentifier(@PathParam("identifier") Long identifier) {
@@ -74,17 +71,32 @@ public class AlunoController {
     @Path("/{identifier}")
     @Transactional
     public Response atualizar(@PathParam("identifier") Long identifier, AlunoDTO dto) {
-        usuarioService.atualizarUsuario(dto.getUsuario(), dto.getUsuario().getIdentifier());
+        var atual = service.buscarPorIdentifier(identifier)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado: " + identifier));
+
+        if (dto.getUsuario() != null) {
+            if (dto.getUsuario().getIdentifier() == null && atual.getUsuario() != null) {
+                dto.getUsuario().setIdentifier(atual.getUsuario().getIdentifier());
+            }
+            usuarioService.atualizarUsuario(dto.getUsuario(), dto.getUsuario().getIdentifier());
+        }
+
         service.atualizar(mapper.toDomainFromDTO(dto), identifier);
-        return Response.ok(dto).build();
+        return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{identifier}")
     @Transactional
     public Response removerPorIdentifier(@PathParam("identifier") Long identifier) {
-        Aluno aluno = service.buscarPorIdentifier(identifier).get();
-        usuarioService.excluirUsuario(aluno.getUsuario().getIdentifier());
+        Aluno aluno = service.buscarPorIdentifier(identifier)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
+        // Null-safety: só tenta excluir no KC se houver usuário associado
+        if (aluno.getUsuario() != null && aluno.getUsuario().getIdentifier() != null) {
+            usuarioService.excluirUsuario(aluno.getUsuario().getIdentifier());
+        }
+
         boolean removido = service.excluirPorIdentifier(identifier);
         if (!removido) {
             throw new NotFoundException("Aluno não encontrado");

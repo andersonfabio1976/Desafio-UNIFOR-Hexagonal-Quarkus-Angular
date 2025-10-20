@@ -1,25 +1,18 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-
-@Component({
-  selector: 'app-semestre',
-  template: `
-    <mat-card>
-      <h2>Gestão de Semestres</h2>
-      <p>Tela placeholder — CRUD completo será adicionado aqui.</p>
-    </mat-card>
-  `,
-})
-export class SemestreComponent {}
+import { MaterialModule } from '../../../../shared/material.module';
+import { SemestreComponent } from './semestre.component';
 
 @NgModule({
   declarations: [SemestreComponent],
   imports: [
     CommonModule,
-    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
     RouterModule.forChild([{ path: '', component: SemestreComponent }]),
   ],
 })
-export class SemestreModule {} // 👈 Nome idêntico ao do then()
+export class SemestreModule {}

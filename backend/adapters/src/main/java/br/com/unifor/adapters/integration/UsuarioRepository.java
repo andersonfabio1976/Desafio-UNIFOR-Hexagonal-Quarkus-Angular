@@ -6,8 +6,6 @@ import br.com.unifor.adapters.mapper.UsuarioMapper;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,17 +16,15 @@ public class UsuarioRepository implements PanacheRepository<UsuarioEntity> {
     @Inject
     UsuarioMapper usuarioMapper;
 
-    /**
-     * 🔍 Busca usuário pelo ID (identifier)
-     */
+    /** Busca usuário pelo ID (identifier) — null-safe */
     public Optional<Usuario> buscarPorIdentifier(Long identifier) {
-        return findByIdOptional(identifier)
-                .map(usuarioMapper::toDomainFromEntity);
+        if (identifier == null) {
+            return Optional.empty(); // evita findByIdOptional(null) -> IllegalArgumentException
+        }
+        return findByIdOptional(identifier).map(usuarioMapper::toDomainFromEntity);
     }
 
-    /**
-     * 📋 Lista todos os usuários convertendo para o domínio
-     */
+    /** Lista todos os usuários convertendo para o domínio */
     public List<Usuario> listarTodos() {
         return listAll()
                 .stream()
@@ -36,48 +32,41 @@ public class UsuarioRepository implements PanacheRepository<UsuarioEntity> {
                 .toList();
     }
 
-    /**
-     * 💾 Persiste um novo usuário no banco
-     */
-    @Transactional
+    /** Persiste um novo usuário no banco */
     public void salvar(Usuario usuario) {
         UsuarioEntity entity = usuarioMapper.toEntity(usuario);
         persist(entity);
     }
 
-    /**
-     * ✏️ Atualiza um usuário existente
-     */
-    @Transactional
+    /** Atualiza um usuário existente */
     public void atualizar(Usuario usuario, Long identifier) {
+        if (identifier == null) {
+            throw new IllegalArgumentException("Identifier do usuário é obrigatório para atualizar");
+        }
         UsuarioEntity entity = findByIdOptional(identifier)
-                .orElseThrow(() -> new NotFoundException("Registro não encontrado"));
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Registro não encontrado"));
         usuarioMapper.toUpdateEntityMapper(usuario, entity);
         persist(entity);
     }
 
-    /**
-     * ❌ Exclui um usuário pelo identifier
-     */
-    @Transactional
+    /** Exclui um usuário pelo identifier */
     public boolean excluirPorIdentifier(Long identifier) {
+        if (identifier == null) return false;
         return deleteById(identifier);
     }
 
-    /**
-     * 🔍 Busca usuário pelo username
-     */
+    /** Busca usuário pelo username */
     public Optional<Usuario> buscarPorUserName(String username) {
-        return find("username", username)
+        if (username == null || username.isBlank()) return Optional.empty();
+        return find("lower(username) = ?1", username.toLowerCase())
                 .firstResultOptional()
                 .map(usuarioMapper::toDomainFromEntity);
     }
 
-    /**
-     * 🔍 Busca usuário pelo email
-     */
+    /** Busca usuário pelo email */
     public Optional<Usuario> buscarPorEmail(String email) {
-        return find("email", email)
+        if (email == null || email.isBlank()) return Optional.empty();
+        return find("lower(email) = ?1", email.toLowerCase())
                 .firstResultOptional()
                 .map(usuarioMapper::toDomainFromEntity);
     }

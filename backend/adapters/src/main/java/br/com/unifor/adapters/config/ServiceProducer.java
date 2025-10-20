@@ -15,43 +15,41 @@ public class ServiceProducer {
     @Inject CursoMapper cursoMapper;
     @Inject ProfessorMapper professorMapper;
     @Inject SemestreMapper semestreMapper;
-    @Inject MatriculaMapper matriculaMapper;
     @Inject DisciplinaMapper disciplinaMapper;
 
     @Produces
+    @ApplicationScoped
     public AlunoService alunoService() {
         AlunoRepositoryPort repo = new AlunoRepositoryAdapter(alunoMapper);
         return new AlunoService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public CursoService cursoService() {
         CursoRepositoryPort repo = new CursoRepositoryAdapter(cursoMapper);
         return new CursoService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public ProfessorService professorService() {
         ProfessorRepositoryPort repo = new ProfessorRepositoryAdapter(professorMapper);
         return new ProfessorService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public SemestreService semestreService() {
         SemestreRepositoryPort repo = new SemestreRepositoryAdapter(semestreMapper);
-        return new SemestreService();
+        return new SemestreService(repo);
     }
 
     @Produces
-    public MatriculaService matriculaService() {
-        MatriculaRepositoryPort repo = new MatriculaRepositoryAdapter(matriculaMapper);
-        return new MatriculaService();
-    }
-
-    @Produces
+    @ApplicationScoped
     public DisciplinaService disciplinaService() {
         DisciplinaRepositoryPort repo = new DisciplinaRepositoryAdapter(disciplinaMapper);
-        return new DisciplinaService();
+        return new DisciplinaService(repo);
     }
 
 }

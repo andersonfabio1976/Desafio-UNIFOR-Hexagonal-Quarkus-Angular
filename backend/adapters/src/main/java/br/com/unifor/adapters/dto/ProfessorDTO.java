@@ -17,7 +17,6 @@ public class ProfessorDTO extends AuditableDTO {
     private String nome;
     private String email;
     private String area;
-    private List<Disciplina> disciplinas;
     private Boolean coordenador;
     private UsuarioDTO usuario;
 }

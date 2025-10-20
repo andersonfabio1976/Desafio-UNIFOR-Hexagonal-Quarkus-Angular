@@ -1,18 +1,83 @@
-.h-screen {
-  height: 100vh;
+/* Container principal */
+.app-sidenav-container { height: 100vh; }
+
+/* Sidenav azul (cobre container e inner-container do MatSidenav MDC) */
+.app-sidenav {
+  width: 260px;
+  background: #3f51b5 !important;
+  color: #fff !important;
+
+  .mat-drawer-inner-container {
+    background: #3f51b5 !important;
+    color: #fff !important;
+  }
+
+  /* Força as cores do MDC List via CSS variables (Angular Material MDC) */
+  .mat-mdc-list-base {
+    /* rótulo principal do item */
+    --mdc-list-list-item-label-text-color: #fff;
+    /* subheader/overline */
+    --mdc-list-list-item-supporting-text-color: #fff;
+  }
+
+  /* Garante cor branca nos textos internos (várias versões do MDC) */
+  a.mat-mdc-list-item,
+  .mat-mdc-list-item .mdc-list-item__primary-text,
+  .mat-mdc-list-item .mdc-list-item__content,
+  .mat-mdc-subheader {
+    color: #fff !important;
+  }
 }
 
-mat-toolbar {
-  color: white;
-  font-weight: bold;
+/* Lista do menu lateral */
+.side-nav-list {
+  padding-top: 6px;
+
+  /* Títulos das seções (ex.: Painel Coordenador) */
+  .section-title,
+  .mat-mdc-subheader {
+    color: #fff !important;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: .2px;
+    padding: 6px 16px 4px 16px;
+  }
+
+  /* Itens do menu: negrito, branco e destaque no hover/ativo */
+  .nav-item {
+    color: #fff !important;
+    font-weight: 700;
+    border-radius: 6px;
+    margin: 2px 8px;
+    padding-left: 12px;
+
+    /* texto interno do MDC */
+    .mdc-list-item__primary-text,
+    .mdc-list-item__content {
+      color: #fff !important;
+      font-weight: 700;
+    }
+  }
+
+  .nav-item.active,
+  .nav-item:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  mat-divider {
+    border-top-color: rgba(255, 255, 255, 0.24);
+    margin: 8px 8px;
+  }
 }
 
-mat-nav-list a.active {
-  background-color: rgba(63, 81, 181, 0.1);
-  border-left: 4px solid #3f51b5;
+/* Área de conteúdo */
+.app-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fafafa;
 }
 
-.logout-btn {
-  width: 90%;
-  margin: 16px;
-}
+.app-toolbar { position: sticky; top: 0; z-index: 2; }
+.toolbar-title { font-weight: 600; }
+.spacer { flex: 1; }

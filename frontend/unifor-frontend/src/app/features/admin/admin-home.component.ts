@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  ChangeDetectorRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, NavigationEnd } from '@angular/router';
@@ -9,6 +15,7 @@ import { KeycloakService } from 'keycloak-angular';
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
+  encapsulation: ViewEncapsulation.None, // permite estilizar componentes do Material
 })
 export class AdminHomeComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
@@ -22,24 +29,19 @@ export class AdminHomeComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    // Observa Handset e Tablet – ajuste se quiser só Handset
-    this.bo.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+    this.bo.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe((result) => {
       this.isHandset = result.matches;
 
       if (this.sidenav) {
         this.sidenav.mode = this.isHandset ? 'over' : 'side';
-        if (this.isHandset) {
-          this.sidenav.close();
-        } else {
-          this.sidenav.open();
-        }
-        // Evita ExpressionChangedAfterItHasBeenCheckedError
+        if (this.isHandset) this.sidenav.close();
+        else this.sidenav.open();
         this.cdr.detectChanges();
       }
     });
 
     this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
+      .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => {
         if (this.isHandset && this.sidenav?.opened) {
           this.sidenav.close();
@@ -51,7 +53,7 @@ export class AdminHomeComponent implements AfterViewInit {
     try {
       await this.keycloak.logout(window.location.origin);
     } catch (e) {
-      console.error('Erro ao fazer logout', e);
+      console.error('Erro ao fazer logout:', e);
     }
   }
 }

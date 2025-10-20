@@ -1,23 +1,18 @@
 <mat-sidenav-container class="admin-sidenav-container">
-  <mat-sidenav #sidenav class="admin-sidenav" [mode]="'side'" [opened]="true">
-    <div class="admin-sidenav__header">
-      <div class="admin-logo">Painel Admin</div>
-    </div>
+  <mat-sidenav #sidenav mode="side" opened class="admin-sidenav">
+    <h2 class="admin-title">Painel Admin</h2>
 
-    <mat-nav-list class="admin-menu">
-      <a mat-list-item routerLink="/admin/alunos" routerLinkActive="active">Alunos</a>
-      <a mat-list-item routerLink="/admin/professores" routerLinkActive="active">Professores</a>
-      <a mat-list-item routerLink="/admin/cursos" routerLinkActive="active">Cursos</a>
-      <a mat-list-item routerLink="/admin/matriculas" routerLinkActive="active">Matrículas</a>
-      <a mat-list-item routerLink="/admin/semestres" routerLinkActive="active">Semestres</a>
-    </mat-nav-list>
+    <nav class="admin-menu">
+      <a mat-button routerLink="/admin/alunos" routerLinkActive="active">Alunos</a>
+      <a mat-button routerLink="/admin/professores" routerLinkActive="active">Professores</a>
 
-    <div class="admin-sidenav__footer">
-      <button mat-raised-button color="warn" class="logout-btn" (click)="logout()">Sair</button>
-    </div>
+      <div class="menu-spacer"></div>
+
+      <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+    </nav>
   </mat-sidenav>
 
-  <mat-sidenav-content class="admin-main">
+  <mat-sidenav-content class="admin-content">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

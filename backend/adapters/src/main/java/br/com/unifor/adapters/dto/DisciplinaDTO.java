@@ -18,4 +18,5 @@ public class DisciplinaDTO extends AuditableDTO {
     private Professor professor;
     private Curso curso;
     private Semestre semestre;
+    private String cargaHoraria;
 }

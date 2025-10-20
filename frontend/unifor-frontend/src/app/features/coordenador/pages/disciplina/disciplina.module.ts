@@ -1,25 +1,18 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-
-@Component({
-  selector: 'app-disciplina',
-  template: `
-    <mat-card>
-      <h2>Gestão de Disciplinas</h2>
-      <p>Tela placeholder — CRUD completo será adicionado aqui.</p>
-    </mat-card>
-  `,
-})
-export class DisciplinaComponent {}
+import { MaterialModule } from '../../../../shared/material.module';
+import { DisciplinaComponent } from './disciplina.component';
 
 @NgModule({
   declarations: [DisciplinaComponent],
   imports: [
     CommonModule,
-    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: DisciplinaComponent }]),
-  ],
+    MaterialModule
+  ]
 })
 export class DisciplinaModule {}

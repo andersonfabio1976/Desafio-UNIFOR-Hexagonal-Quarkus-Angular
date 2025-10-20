@@ -1,87 +1,77 @@
-:host {
-  /* Tamanho base dos itens do menu e do título */
-  --admin-menu-font-size: 14px;
-}
-
-/* Layout geral */
-.admin-sidenav-container {
+/* garante altura total */
+html, body, app-root, .admin-sidenav-container {
   height: 100%;
 }
 
-.admin-sidenav {
-  width: 260px;
-  background: #1976d2; /* Azul */
+/* container principal do layout */
+.admin-sidenav-container {
+  height: 100vh;
+}
+
+/* IMPORTANTE: quem pinta o fundo do sidenav é o container interno */
+.admin-sidenav .mat-drawer-inner-container {
+  width: 220px;
+  background-color: #1565c0; /* azul */
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding-top: 8px;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Cabeçalho do menu */
-.admin-sidenav__header {
-  padding: 8px 12px 4px;
-}
-
-.admin-logo {
+/* título */
+.admin-title {
+  font-size: 22px;
+  font-weight: 700;
   text-align: center;
-  font-weight: 700;                        /* negrito */
-  font-size: var(--admin-menu-font-size);  /* mesmo tamanho dos itens do menu */
-  line-height: 1.4;
-  letter-spacing: .3px;
-  color: #fff;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
 }
 
-/* Lista do menu */
+/* menu */
 .admin-menu {
-  padding-top: 8px;
-}
-
-/* Ajustes de cores e tamanhos dentro do Angular Material (MD3) */
-:host ::ng-deep .admin-sidenav .mat-mdc-list-item {
-  color: #fff;
-  --mdc-list-list-item-label-text-color: #fff;
-  --mdc-list-list-item-hover-state-layer-color: rgba(255,255,255,.08);
-  --mdc-list-list-item-focus-state-layer-color: rgba(255,255,255,.12);
-  --mdc-list-list-item-activated-state-layer-color: rgba(255,255,255,.16);
-  --mdc-list-list-item-selected-container-color: rgba(255,255,255,.16);
-}
-
-:host ::ng-deep .admin-sidenav a.mat-mdc-list-item {
-  font-size: var(--admin-menu-font-size);
-  border-radius: 4px;
-  margin: 2px 8px;
-  padding: 0 12px;
-}
-
-:host ::ng-deep .admin-sidenav a.mat-mdc-list-item:hover {
-  background: rgba(255,255,255,.08);
-}
-
-:host ::ng-deep .admin-sidenav a.mat-mdc-list-item.active {
-  background: rgba(255,255,255,.16);
-  font-weight: 600;
-}
-
-/* Rodapé com botão centralizado */
-.admin-sidenav__footer {
-  margin-top: auto;               /* empurra o footer para o rodapé */
-  padding: 12px 8px 16px;
   display: flex;
-  justify-content: center;        /* centraliza o botão */
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  min-height: 0;
+  flex: 1;
 }
 
-.logout-btn {
-  min-width: 140px;
-  justify-content: center;
+.admin-menu a.mat-button {
+  display: block;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
 
-/* Conteúdo principal */
-.admin-main {
-  padding: 16px;
+.admin-menu a:hover,
+.admin-menu a.active {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-@media (max-width: 960px) {
-  .admin-main {
-    padding: 12px;
-  }
+/* empurra o botão sair para o rodapé */
+.menu-spacer {
+  flex: 1 1 auto;
+}
+
+.admin-menu button {
+  width: 80%;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* área do conteúdo ocupa 100% */
+.admin-content {
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: #f7f7f7;
 }

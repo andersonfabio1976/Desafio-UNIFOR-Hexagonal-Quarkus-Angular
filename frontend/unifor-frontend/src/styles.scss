@@ -1,11 +1,10 @@
 @use '@angular/material' as mat;
 
-// 🔷 Define a paleta de cores do tema UNIFOR (base azul)
+// Tema
 $unifor-primary: mat.define-palette(mat.$indigo-palette, 500);
 $unifor-accent: mat.define-palette(mat.$blue-palette, 400, 200, 600);
 $unifor-warn: mat.define-palette(mat.$red-palette);
 
-// 🔹 Cria o tema principal (light theme)
 $unifor-theme: mat.define-light-theme((
   color: (
     primary: $unifor-primary,
@@ -15,14 +14,100 @@ $unifor-theme: mat.define-light-theme((
   typography: mat.define-typography-config(),
 ));
 
-// 🔸 Aplica o núcleo do Material e o tema
 @include mat.core();
 @include mat.all-component-themes($unifor-theme);
 
-// 🔹 Define estilos globais
+// Globais
 html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #fafafa;
+  overflow-x: hidden; // nunca permitir overflow horizontal global
+}
+
+/* Box-sizing consistente */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ===== Layout Admin ===== */
+
+/* Use 100% em vez de 100vh (evita cálculos ruins com barras de rolagem) */
+mat-sidenav-container.admin-sidenav-container {
+  height: 100% !important;
+  overflow-x: hidden !important; // bloqueia overflow lateral no container
+}
+
+/* Lateral com largura consistente */
+mat-sidenav.admin-sidenav {
+  width: 240px !important;
+  background-color: #1565c0 !important;
+  color: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding-top: 20px !important;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sidenav h2.admin-title {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  margin-bottom: 25px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.admin-menu {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.admin-menu a {
+  color: #fff !important;
+  font-size: 16px !important;
+  text-decoration: none !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important;
+  border-radius: 4px !important;
+  transition: background 0.2s !important;
+}
+
+.admin-menu a:hover,
+.admin-menu a.active {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.admin-menu button {
+  margin-top: 20px !important;
+  width: 80% !important;
+  font-weight: 600 !important;
+}
+
+/* Conteúdo central:
+   - ESQ 16px (mantido), DIR 24px (margem que você quer ver)
+   - min-width: 0 é fundamental para não “comer” a direita
+*/
+mat-sidenav-content.admin-content {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;                       /* CHAVE: permite encolher no flex */
+  padding: 16px 24px 16px 16px !important;       /* top right bottom left */
+  background-color: #fafafa !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;                 /* sem barra horizontal */
+  width: 100%;
+  max-width: 100%;
+}
+
+/* O content real do drawer também precisa permitir encolher */
+.mat-drawer-content {
+  min-width: 0 !important;                       /* CHAVE 2 */
+  overflow-x: hidden !important;
 }

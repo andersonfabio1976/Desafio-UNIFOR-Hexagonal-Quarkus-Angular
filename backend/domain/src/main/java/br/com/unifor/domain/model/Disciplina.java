@@ -8,12 +8,12 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-@SuperBuilder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Disciplina extends AuditableModel {
+@Builder
+public class Disciplina {
+    private Long identifier;
     private String nome;
     private Professor professor;
     private Curso curso;
     private Semestre semestre;
+    private String cargaHoraria;
 }

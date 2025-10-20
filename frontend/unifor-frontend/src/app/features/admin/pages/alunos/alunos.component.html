@@ -26,6 +26,20 @@
             <mat-label>Data de Nascimento***</mat-label>
             <input matInput type="date" formControlName="dataNascimento" />
           </mat-form-field>
+
+          <!-- NOVO: Curso do Aluno -->
+          <mat-form-field appearance="outline">
+            <mat-label>Curso***</mat-label>
+            <mat-select formControlName="cursoId" required>
+              <mat-option [value]="null">-- Selecione --</mat-option>
+              <mat-option *ngFor="let c of cursos" [value]="c.identifier">
+                {{ c.nome || ('#' + c.identifier) }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f['cursoId'].touched && f['cursoId'].invalid">
+              Curso obrigatório
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <h3>Dados de Usuário</h3>
@@ -91,23 +105,28 @@
           <td mat-cell *matCellDef="let a">{{ a.email }}</td>
         </ng-container>
 
+        <!-- NOVA Coluna: Curso -->
+        <ng-container matColumnDef="curso">
+          <th mat-header-cell *matHeaderCellDef>Curso</th>
+          <td mat-cell *matCellDef="let a">{{ a.curso?.nome || '-' }}</td>
+        </ng-container>
+
         <!-- Coluna: Ações -->
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
-          <td mat-cell *matCellDef="let a">
-            <button mat-button color="primary" (click)="editar(a)">Editar</button>
-            <button mat-button color="warn" (click)="remover(a.identifier)">
-              Excluir
-            </button>
+          <td mat-cell *matCellDef="let aluno">
+            <button mat-button color="primary" (click)="editar(aluno)">Editar</button>
+            <button mat-button color="warn" (click)="remover(aluno.identifier!)">Excluir</button>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['nome', 'email', 'acoes']"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: ['nome', 'email', 'acoes'];"
-        ></tr>
+        <tr mat-header-row *matHeaderRowDef="['nome', 'email', 'curso', 'acoes']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['nome', 'email', 'curso', 'acoes'];"></tr>
       </table>
-    </mat-card-content>
+    </div>
+
+    <ng-template #vazio>
+      <div class="empty">Nenhum aluno cadastrado.</div>
+    </ng-template>
   </mat-card>
 </div>

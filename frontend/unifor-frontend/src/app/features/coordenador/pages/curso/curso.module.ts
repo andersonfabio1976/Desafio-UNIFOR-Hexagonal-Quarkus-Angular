@@ -1,25 +1,19 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-
-@Component({
-  selector: 'app-curso',
-  template: `
-    <mat-card>
-      <h2>Gestão de Cursos</h2>
-      <p>Tela placeholder — CRUD completo será adicionado aqui.</p>
-    </mat-card>
-  `,
-})
-export class CursoComponent {}
+import { MaterialModule } from '../../../../shared/material.module';
+import { CursoComponent } from './curso.component';
 
 @NgModule({
   declarations: [CursoComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatCardModule,
     RouterModule.forChild([{ path: '', component: CursoComponent }]),
-  ],
+    MaterialModule
+  ]
 })
-export class CursoModule {} // 👈 Nome idêntico ao do then()
+export class CursoModule {}

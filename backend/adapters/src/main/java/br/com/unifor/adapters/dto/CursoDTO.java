@@ -15,8 +15,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CursoDTO extends AuditableDTO {
     private String nome;
-    private List<Disciplina> disciplinas;
-    private List<Semestre> semestres;
-
 
 }

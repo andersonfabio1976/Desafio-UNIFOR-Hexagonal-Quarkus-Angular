@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlunosService } from './alunos.service';
-import { AlunoDTO } from './aluno.dto';
+import { AlunoDTO } from '../alunos/aluno.dto';
+import { LookupService, IdName } from '../../../../shared/lookup.service'; // usar lookup para listar cursos
 
 @Component({
   selector: 'app-alunos',
@@ -11,18 +12,25 @@ import { AlunoDTO } from './aluno.dto';
 export class AlunosComponent implements OnInit {
   form!: FormGroup;
   alunos: AlunoDTO[] = [];
+  cursos: IdName[] = []; // dropdown de cursos
+
   carregando = false;
   saving = false;
   editing = false;
 
-  constructor(private fb: FormBuilder, private service: AlunosService) {}
+  constructor(
+    private fb: FormBuilder,
+    private service: AlunosService,
+    private lookup: LookupService
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      identifier: [null],
-      nome: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
+      // input type="date" devolve string (yyyy-MM-dd). Se virar Date em algum momento, normalizamos no salvar().
       dataNascimento: ['', Validators.required],
+      cursoId: [null, Validators.required], // novo campo
       usuario: this.fb.group({
         identifier: [null],
         username: ['', Validators.required],
@@ -31,20 +39,30 @@ export class AlunosComponent implements OnInit {
       })
     });
 
+    this.carregarLookups();
     this.listar();
   }
 
-  /** ✅ Getter compatível com Angular 17 (usar f['nome']) */
   get f() {
     return this.form.controls as { [key: string]: any };
   }
 
-  listar(): void {
-    this.carregando = true;
-    this.service.listarTodos().subscribe({
-      next: (res) => (this.alunos = res),
-      error: (err) => console.error(err),
-      complete: () => (this.carregando = false)
+  private carregarLookups(): void {
+    this.lookup.cursos().subscribe({
+      next: (res) => (this.cursos = res ?? []),
+      error: (err) => console.error('Erro ao carregar cursos', err),
+    });
+  }
+
+  load() {
+    this.alunosService.listarTodos().subscribe({
+      next: (list) => {
+        this.alunos = list ?? [];
+      },
+      error: (err) => {
+        console.error('Falha ao listar alunos', err);
+        alert('Falha ao carregar a lista de alunos.');
+      },
     });
   }
 
@@ -57,7 +75,7 @@ export class AlunosComponent implements OnInit {
     this.saving = true;
     const raw = this.form.value;
 
-    // 🔧 Converte ddMMyyyy → yyyy-MM-dd
+    // Converte ddMMyyyy → yyyy-MM-dd caso venha sem hífens
     let dataFormatada = raw.dataNascimento;
     if (dataFormatada && /^\d{8}$/.test(dataFormatada)) {
       const dia = dataFormatada.substring(0, 2);
@@ -71,6 +89,7 @@ export class AlunosComponent implements OnInit {
       nome: raw.nome.trim(),
       email: raw.email.trim(),
       dataNascimento: dataFormatada,
+      curso: raw.cursoId ? { identifier: Number(raw.cursoId), nome: '' } as any : undefined,
       usuario: {
         identifier: raw.usuario.identifier ?? undefined,
         username: raw.usuario.username.trim(),
@@ -102,27 +121,29 @@ export class AlunosComponent implements OnInit {
       nome: a.nome,
       email: a.email,
       dataNascimento: a.dataNascimento,
+      cursoId: a.curso?.identifier ?? null,
       usuario: {
-        username: a.usuario?.username,
+        identifier: a.usuario?.identifier ?? null,
+        username: a.usuario?.username ?? '',
         password: '',
         confirmarSenha: ''
       }
     });
   }
 
-  cancelar(): void {
+  cancelar() {
     this.form.reset();
     this.editing = false;
   }
 
-  remover(id: number): void {
-    if (confirm('Confirma a exclusão do aluno?')) {
-      this.service.remover(id).subscribe({
-        next: () => this.listar(),
+  remover(id: number) {
+    if (confirm('Deseja remover este aluno?')) {
+      this.alunosService.remover(id).subscribe({
+        next: () => this.load(),
         error: (err) => {
-          console.error('❌ Erro ao remover aluno', err);
-          alert('Erro ao remover aluno.');
-        }
+          console.error('Falha ao remover aluno', err);
+          alert('Falha ao remover aluno.');
+        },
       });
     }
   }

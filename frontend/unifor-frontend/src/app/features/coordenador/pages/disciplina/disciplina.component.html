@@ -1,0 +1,107 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>Cadastro de Disciplina</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome***</mat-label>
+            <input matInput formControlName="nome" />
+            <mat-error *ngIf="f['nome'].touched && f['nome'].invalid">
+              Nome obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Carga Horária (h)***</mat-label>
+            <input matInput type="number" min="1" formControlName="cargaHoraria" />
+            <mat-error *ngIf="f['cargaHoraria'].touched && f['cargaHoraria'].invalid">
+              Informe um número válido (mínimo 1)
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Professor</mat-label>
+            <mat-select formControlName="professorId">
+              <mat-option [value]="null">-- Selecione --</mat-option>
+              <mat-option *ngFor="let p of professores" [value]="p.identifier">
+                {{ p.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Curso</mat-label>
+            <mat-select formControlName="cursoId">
+              <mat-option [value]="null">-- Selecione --</mat-option>
+              <mat-option *ngFor="let c of cursos" [value]="c.identifier">
+                {{ c.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Semestre</mat-label>
+            <mat-select formControlName="semestreId">
+              <mat-option [value]="null">-- Selecione --</mat-option>
+              <mat-option *ngFor="let s of semestres" [value]="s.identifier">
+                {{ s.numero || s.nome || ('#' + s.identifier) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="button-area">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || saving">
+            {{ editing ? 'Atualizar' : 'Incluir' }}
+          </button>
+          <button mat-stroked-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Lista de Disciplinas</mat-card-title>
+    <mat-card-content>
+      <table mat-table [dataSource]="disciplinas" class="mat-elevation-z1 table-alunos">
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>Nome</th>
+          <td mat-cell *matCellDef="let d">{{ d.nome }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cargaHoraria">
+          <th mat-header-cell *matHeaderCellDef>Carga Horária</th>
+          <td mat-cell *matCellDef="let d">{{ d.cargaHoraria ?? '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="professor">
+          <th mat-header-cell *matHeaderCellDef>Professor</th>
+          <td mat-cell *matCellDef="let d">{{ d.professor?.nome || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="curso">
+          <th mat-header-cell *matHeaderCellDef>Curso</th>
+          <td mat-cell *matCellDef="let d">{{ d.curso?.nome || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="semestre">
+          <th mat-header-cell *matHeaderCellDef>Semestre</th>
+          <td mat-cell *matCellDef="let d">{{ d.semestre?.numero ?? '-' }}</td>
+        </ng-container>
+
+        <!-- RESTAURADO: coluna de ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let d">
+            <button mat-button color="primary" (click)="editar(d)">Editar</button>
+            <button mat-button color="warn" (click)="remover(d.identifier)">Excluir</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['nome','cargaHoraria','professor','curso','semestre','acoes']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['nome','cargaHoraria','professor','curso','semestre','acoes'];"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

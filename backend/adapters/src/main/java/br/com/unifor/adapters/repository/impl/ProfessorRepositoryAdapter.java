@@ -1,13 +1,10 @@
 package br.com.unifor.adapters.repository.impl;
 
-import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.ProfessorMapper;
 import br.com.unifor.adapters.repository.entity.ProfessorEntity;
 import br.com.unifor.application.port.repository.ProfessorRepositoryPort;
 import br.com.unifor.domain.model.Professor;
 import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.Optional;
 
 @ApplicationScoped
 public class ProfessorRepositoryAdapter extends BaseRepositoryAdapter<ProfessorEntity, Professor>
@@ -20,5 +17,4 @@ public class ProfessorRepositoryAdapter extends BaseRepositoryAdapter<ProfessorE
         super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
-
 }

@@ -1,50 +1,40 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate,
-  CanActivateChild,
-  Router,
   ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
   RouterStateSnapshot,
+  UrlTree,
 } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AdminGuard implements CanActivate, CanActivateChild {
+export class AdminGuard implements CanActivate {
   constructor(private keycloakService: KeycloakService, private router: Router) {}
 
   async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Promise<boolean> {
-    const hasAccess = await this.checkAccess(route);
-    if (!hasAccess) {
-      this.router.navigate(['/acesso-negado']);
-    }
-    return hasAccess;
-  }
-
-  async canActivateChild(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<boolean> {
-    return this.canActivate(route, state);
-  }
-
-  private async checkAccess(route: ActivatedRouteSnapshot): Promise<boolean> {
-    const roles = route.data['roles'] as Array<string>;
+  ): Promise<boolean | UrlTree> {
     const isLoggedIn = await this.keycloakService.isLoggedIn();
 
     if (!isLoggedIn) {
-      await this.keycloakService.login();
+      await this.keycloakService.login({
+        redirectUri: window.location.origin + state.url,
+      });
       return false;
     }
 
-    if (!roles || roles.length === 0) {
-      return true;
-    }
+    const roles = this.keycloakService.getUserRoles();
+    const adminOk = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
+    if (adminOk) return true;
 
-    return roles.some((role) => this.keycloakService.isUserInRole(role));
+    // ALTERAÇÃO: se for coordenador, redireciona ao espaço dele; senão acesso negado
+    const isCoord = roles.includes('COORDENADOR') || roles.includes('ROLE_COORDENADOR');
+    if (isCoord) return this.router.parseUrl('/coord');
+
+    return this.router.parseUrl('/acesso-negado');
   }
 }

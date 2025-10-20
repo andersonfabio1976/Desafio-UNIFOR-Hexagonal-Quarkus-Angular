@@ -15,17 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Semestre extends AuditableModel {
     private int numero;
-
-    @Builder.Default
-    private List<Disciplina> disciplinas = new ArrayList<>();
-
-    @Builder.Default
-    private List<Matricula> matriculas = new ArrayList<>();
-
     private Curso curso;
 
-    public void adicionarDisciplina(Disciplina disciplina) {
-        if (disciplina == null) throw new IllegalArgumentException("Disciplina não pode ser nula");
-        disciplinas.add(disciplina);
-    }
 }

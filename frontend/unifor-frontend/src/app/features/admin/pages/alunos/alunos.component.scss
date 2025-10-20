@@ -1,100 +1,94 @@
-/* ===== CONTAINER GERAL ===== */
-.container {
+:host {
+  display: block;
   width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 100%;
   box-sizing: border-box;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 50px;
 }
 
-/* ===== FORMS ===== */
+/* Container do componente — sem limites/margens extras */
+.container {
+  width: 100%;
+  max-width: 92%;
+  margin: 0;
+  padding: 0;      /* respiro vem do mat-sidenav-content (16 ESQ, 24 DIR) */
+  box-sizing: border-box;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  min-width: 0;    /* impede overflow lateral */
+}
+
+/* Cards 100% com separação vertical */
+mat-card {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 16px 0;
+  box-sizing: border-box;
+}
+
+/* Formulário — Grid responsivo sem ultrapassar 100% */
 .form-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
 }
 
 mat-form-field {
-  flex: 1 1 calc(33.33% - 16px);
-  min-width: 220px;
+  width: 100%;
+  min-width: 0; /* inputs não “esticam” a coluna */
 }
 
-/* ===== BOTÕES ===== */
+/* Botões */
 .button-area {
   display: flex;
   gap: 12px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .button-area button {
   min-width: 120px;
 }
 
-/* ===== LISTA DE ALUNOS ===== */
+/* Tabela — correção definitiva de overflow:
+   - container rola horizontalmente se precisar
+   - table layout fixed: células não expandem o layout
+   - sem larguras percentuais que somam com padding
+*/
 .table-alunos {
   width: 100%;
-  min-width: 700px;
+  max-width: 100%;
+  min-width: 0;
   border-collapse: collapse;
   margin-top: 10px;
+  overflow-x: auto;                /* se precisar, rola dentro do card */
+  -webkit-overflow-scrolling: touch;
 }
 
+.table-alunos .mat-mdc-table,
+.table-alunos table,
+.table-alunos .mat-table,
+.table-alunos .cdk-table {
+  width: 100% !important;
+  table-layout: fixed !important;  /* CHAVE para não “empurrar” largura */
+  border-collapse: collapse;
+}
+
+/* Células não expandem; cortam com reticência se preciso */
 .table-alunos th,
 .table-alunos td {
   padding: 12px 16px;
   text-align: left;
   vertical-align: middle;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Larguras proporcionais */
-.table-alunos th:nth-child(1),
-.table-alunos td:nth-child(1) {
-  width: 30%;
-}
-
-.table-alunos th:nth-child(2),
-.table-alunos td:nth-child(2) {
-  width: 45%;
-}
-
-.table-alunos th:nth-child(3),
-.table-alunos td:nth-child(3) {
-  width: 25%;
-  text-align: center;
-}
-
-/* ===== BOTÕES DE AÇÃO ===== */
-.table-alunos button {
-  font-size: 13px;
-  padding: 4px 8px;
-  text-transform: none;
-}
-
-.table-alunos button[color="primary"] {
-  color: #1976d2;
-}
-
-.table-alunos button[color="warn"] {
-  color: #e53935;
-}
-
-/* ===== RESPONSIVIDADE ===== */
+/* Removidas larguras percentuais fixas nas colunas para não somar com padding */
 @media (max-width: 768px) {
-  mat-form-field {
-    flex: 1 1 100%;
-  }
-
   .table-alunos {
-    display: block;
     overflow-x: auto;
-    min-width: unset;
-  }
-
-  .table-alunos th,
-  .table-alunos td {
-    white-space: nowrap;
   }
 }

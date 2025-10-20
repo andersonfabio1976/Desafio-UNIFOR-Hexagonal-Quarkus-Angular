@@ -26,6 +26,8 @@ public class AlunoEntity extends AuditableEntity {
     @JoinColumn(name = "usuario_identifier")
     UsuarioEntity usuario;
 
-    @OneToMany(mappedBy = "aluno")
-    private List<MatriculaEntity> matriculas;
+    @ManyToOne
+    @JoinColumn(name = "curso_identifier")
+    CursoEntity curso;
+
 }

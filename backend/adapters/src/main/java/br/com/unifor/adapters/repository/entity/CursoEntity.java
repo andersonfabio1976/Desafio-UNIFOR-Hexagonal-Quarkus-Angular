@@ -19,9 +19,4 @@ public class CursoEntity extends AuditableEntity {
 
     private String nome;
 
-    @OneToMany(mappedBy = "curso")
-    private List<DisciplinaEntity> disciplinas;
-
-    @OneToMany(mappedBy = "curso")
-    private List<SemestreEntity> semestres;
 }

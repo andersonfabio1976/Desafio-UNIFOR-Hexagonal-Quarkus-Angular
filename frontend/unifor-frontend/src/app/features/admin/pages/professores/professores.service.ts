@@ -22,14 +22,12 @@ export class ProfessoresService {
 
   salvar(dto: ProfessorDTO): Observable<ProfessorDTO> {
     if (dto.identifier) {
-      // ✅ corrigido aqui
       return this.http.put<ProfessorDTO>(`${this.baseUrl}/${dto.identifier}`, dto);
     }
     return this.http.post<ProfessorDTO>(this.baseUrl, dto);
   }
 
   remover(id: number): Observable<void> {
-    // ✅ corrigido aqui também
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

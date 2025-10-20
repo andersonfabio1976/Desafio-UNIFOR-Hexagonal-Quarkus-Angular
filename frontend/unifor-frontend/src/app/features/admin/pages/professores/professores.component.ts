@@ -34,14 +34,13 @@ export class ProfessoresComponent implements OnInit {
     this.carregar();
   }
 
-  /** ✅ Getter compatível com Angular 17 (usar f['nome']) */
   get f() {
     return this.form.controls as { [key: string]: any };
   }
 
   carregar(): void {
     this.service.listarTodos().subscribe({
-      next: (res) => (this.professores = res),
+      next: (res) => (this.professores = res ?? []),
       error: (err) => console.error('Erro ao listar professores', err)
     });
   }
@@ -57,23 +56,23 @@ export class ProfessoresComponent implements OnInit {
 
     const dto: ProfessorDTO = {
       identifier: raw.identifier ?? undefined,
-      nome: raw.nome.trim(),
-      email: raw.email.trim(),
-      area: raw.area.trim(),
+      nome: String(raw.nome ?? '').trim(),
+      email: String(raw.email ?? '').trim(),
+      area: String(raw.area ?? '').trim(),
       coordenador: !!raw.coordenador,
       usuario: {
-        identifier: raw.usuario.identifier ?? undefined,
-        username: raw.usuario.username.trim(),
-        firstName: raw.nome.trim(),
+        identifier: raw.usuario?.identifier ?? undefined,
+        username: String(raw.usuario?.username ?? '').trim(),
+        firstName: String(raw.nome ?? '').trim(),
         lastName: '',
-        email: raw.email.trim(),
-        password: raw.usuario.password
-      }
+        email: String(raw.email ?? '').trim(),
+        password: raw.usuario?.password
+      } as any
     };
 
     this.service.salvar(dto).subscribe({
       next: () => {
-        this.form.reset();
+        this.form.reset({ coordenador: false, usuario: { password: '', confirmarSenha: '' } });
         this.carregar();
         this.editing = false;
       },
@@ -88,13 +87,14 @@ export class ProfessoresComponent implements OnInit {
   editar(p: ProfessorDTO): void {
     this.editing = true;
     this.form.patchValue({
-      identifier: p.identifier,
-      nome: p.nome,
-      email: p.email,
-      area: p.area,
-      coordenador: p.coordenador,
+      identifier: p.identifier ?? null,
+      nome: p.nome ?? '',
+      email: p.email ?? '',
+      area: p.area ?? '',
+      coordenador: !!p.coordenador,
       usuario: {
-        username: p.usuario?.username,
+        identifier: p.usuario?.identifier ?? null,
+        username: p.usuario?.username ?? '',
         password: '',
         confirmarSenha: ''
       }
@@ -102,11 +102,12 @@ export class ProfessoresComponent implements OnInit {
   }
 
   cancelar(): void {
-    this.form.reset();
+    this.form.reset({ coordenador: false, usuario: { password: '', confirmarSenha: '' } });
     this.editing = false;
   }
 
-  remover(id: number): void {
+  remover(id?: number): void {
+    if (!id) return;
     if (confirm('Confirma a exclusão do professor?')) {
       this.service.remover(id).subscribe({
         next: () => this.carregar(),

@@ -1,28 +1,18 @@
 import { KeycloakService } from 'keycloak-angular';
 
-// Ajuste estes valores ao seu Keycloak
-const KEYCLOAK_URL = 'http://localhost:8080';      // ou http://unifor-keycloak:8080 quando frontend estiver no container
-const REALM = 'unifor-realm';
-const CLIENT_ID = 'unifor-frontend';
-
 export function initializeKeycloak(keycloak: KeycloakService) {
-  return async () => {
-    await keycloak.init({
+  return async () =>
+    keycloak.init({
       config: {
-        url: KEYCLOAK_URL,
-        realm: REALM,
-        clientId: CLIENT_ID
+        url: 'http://localhost:8080',
+        realm: 'unifor-realm',
+        clientId: 'unifor-frontend',
       },
       initOptions: {
-        onLoad: 'login-required',
-        pkceMethod: 'S256',
+        onLoad: 'check-sso',
+        checkLoginIframe: false,
       },
-      bearerExcludedUrls: [
-        '/assets',
-      ],
       enableBearerInterceptor: true,
-      bearerPrefix: 'Bearer'
+      bearerExcludedUrls: ['/assets', '/favicon.ico'],
     });
-
-  };
 }

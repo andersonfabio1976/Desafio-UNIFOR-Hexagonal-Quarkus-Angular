@@ -1,24 +1,18 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 
-@Component({
-  selector: 'app-matriz',
-  template: `
-    <mat-card>
-      <h2>Matriz Curricular</h2>
-      <p>Tela placeholder — CRUD completo será adicionado aqui.</p>
-    </mat-card>
-  `,
-})
-export class MatrizComponent {}
+import { MaterialModule } from '../../../../shared/material.module';
+import { MatrizComponent } from './matriz.component';
 
 @NgModule({
   declarations: [MatrizComponent],
   imports: [
     CommonModule,
-    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
     RouterModule.forChild([{ path: '', component: MatrizComponent }]),
   ],
 })

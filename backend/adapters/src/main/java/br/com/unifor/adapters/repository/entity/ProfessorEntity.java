@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.util.List;
 
 @Entity
 @Table(name = "professor")
@@ -24,6 +23,4 @@ public class ProfessorEntity extends AuditableEntity {
     @JoinColumn(name = "usuario_identifier")
     private UsuarioEntity usuario;
 
-    @OneToMany(mappedBy = "professor")
-    private List<DisciplinaEntity> disciplinas;
 }

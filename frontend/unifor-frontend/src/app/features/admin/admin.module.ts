@@ -1,24 +1,45 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AdminRoutingModule } from './admin-routing.module';
-import { AlunosModule } from './pages/alunos/alunos.module';
-import { MaterialModule } from '../../shared/material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AdminHomeComponent } from './admin-home.component';
-import { AdminWelcomeComponent } from './admin-welcome.component';
+import { AdminRoutingModule } from './admin-routing.module';
+
+// Páginas
+import { AlunosComponent } from './pages/alunos/alunos.component';
+import { ProfessoresComponent } from './pages/professores/professores.component';
+
+// Angular Material
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
-    AdminHomeComponent,
-    AdminWelcomeComponent
+    AlunosComponent,
+    ProfessoresComponent
   ],
   imports: [
     CommonModule,
-    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     AdminRoutingModule,
-    AlunosModule,
-    MaterialModule, // 👈 adiciona os componentes do Angular Material
-  ],
+
+    // Material
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCheckboxModule // <-- necessário para <mat-checkbox>
+  ]
 })
 export class AdminModule {}
