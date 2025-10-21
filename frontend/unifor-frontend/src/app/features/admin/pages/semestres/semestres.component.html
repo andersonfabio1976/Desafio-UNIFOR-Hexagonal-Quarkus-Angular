@@ -1,0 +1,22 @@
+<div class="container">
+  <h2>Semestres</h2>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Data Início</th>
+      <th>Data Fim</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let semestre of semestres">
+      <td>{{ semestre.id }}</td>
+      <td>{{ semestre.nome }}</td>
+      <td>{{ semestre.dataInicio }}</td>
+      <td>{{ semestre.dataFim }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

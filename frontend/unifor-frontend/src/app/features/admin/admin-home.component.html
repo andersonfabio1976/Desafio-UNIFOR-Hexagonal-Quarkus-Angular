@@ -1,0 +1,18 @@
+<mat-sidenav-container class="admin-sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="admin-sidenav">
+    <h2 class="admin-title">Painel Admin</h2>
+
+    <nav class="admin-menu">
+      <a mat-button routerLink="/admin/alunos" routerLinkActive="active">Alunos</a>
+      <a mat-button routerLink="/admin/professores" routerLinkActive="active">Professores</a>
+
+      <div class="menu-spacer"></div>
+
+      <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="admin-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

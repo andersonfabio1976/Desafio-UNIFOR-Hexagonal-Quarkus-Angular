@@ -15,15 +15,9 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class SemestreEntity extends  BaseEntity {
+public class SemestreEntity extends AuditableEntity {
 
     private int numero;
-
-    @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatriculaEntity> matriculas;
-
-    @OneToMany(mappedBy = "semestre")
-    private List<DisciplinaEntity> disciplinas;
 
 
     @ManyToOne

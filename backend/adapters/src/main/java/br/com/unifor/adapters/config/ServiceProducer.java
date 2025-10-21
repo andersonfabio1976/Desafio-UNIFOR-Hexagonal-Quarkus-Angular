@@ -6,69 +6,50 @@ import br.com.unifor.application.port.repository.*;
 import br.com.unifor.application.service.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ServiceProducer {
 
-    private final AlunoMapper alunoMapper;
-    private final CursoMapper cursoMapper;
-    private final ProfessorMapper professorMapper;
-    private final SemestreMapper semestreMapper;
-    private final MatriculaMapper matriculaMapper;
-    private final DisciplinaMapper disciplinaMapper;
-
-
-    public ServiceProducer(
-            AlunoMapper alunoMapper,
-            CursoMapper cursoMapper,
-            ProfessorMapper professorMapper,
-            SemestreMapper semestreMapper,
-            MatriculaMapper matriculaMapper,
-            DisciplinaMapper disciplinaMapper
-    ) {
-        this.alunoMapper = alunoMapper;
-        this.cursoMapper = cursoMapper;
-        this.professorMapper = professorMapper;
-        this.semestreMapper = semestreMapper;
-        this.matriculaMapper = matriculaMapper;
-        this.disciplinaMapper = disciplinaMapper;
-
-    }
+    @Inject AlunoMapper alunoMapper;
+    @Inject CursoMapper cursoMapper;
+    @Inject ProfessorMapper professorMapper;
+    @Inject SemestreMapper semestreMapper;
+    @Inject DisciplinaMapper disciplinaMapper;
 
     @Produces
+    @ApplicationScoped
     public AlunoService alunoService() {
         AlunoRepositoryPort repo = new AlunoRepositoryAdapter(alunoMapper);
         return new AlunoService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public CursoService cursoService() {
         CursoRepositoryPort repo = new CursoRepositoryAdapter(cursoMapper);
         return new CursoService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public ProfessorService professorService() {
         ProfessorRepositoryPort repo = new ProfessorRepositoryAdapter(professorMapper);
         return new ProfessorService(repo);
     }
 
     @Produces
+    @ApplicationScoped
     public SemestreService semestreService() {
         SemestreRepositoryPort repo = new SemestreRepositoryAdapter(semestreMapper);
-        return new SemestreService();
+        return new SemestreService(repo);
     }
 
     @Produces
-    public MatriculaService matriculaService() {
-        MatriculaRepositoryPort repo = new MatriculaRepositoryAdapter(matriculaMapper);
-        return new MatriculaService();
-    }
-
-    @Produces
+    @ApplicationScoped
     public DisciplinaService disciplinaService() {
         DisciplinaRepositoryPort repo = new DisciplinaRepositoryAdapter(disciplinaMapper);
-        return new DisciplinaService();
+        return new DisciplinaService(repo);
     }
 
 }

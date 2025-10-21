@@ -1,0 +1,14 @@
+@import '../../../admin/pages/alunos/alunos.component.scss';
+
+/* Ajustes visuais do checkbox como item do grid */
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+/* Garante que o mat-checkbox não estoure a coluna do grid */
+.checkbox-field mat-checkbox {
+  max-width: 100%;
+  white-space: nowrap;
+}

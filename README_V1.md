@@ -55,6 +55,8 @@ desafio-unifor-hexagonal-quarkus-angular/
 ## 🚀 Execução do Projeto
 
 **Pré-requisitos:**
+
+- Após fazer clone no projeto, na pasta backend de um mvn clean install
 - Docker e Docker Compose instalados.
 
 **Comando único para subir o ambiente:**
@@ -64,9 +66,10 @@ docker-compose up -d
 
 **Acessos:**
 
-* **Frontend Angular:** [http://localhost:1000](http://localhost:1000)
+
+* **Frontend Angular:** [http://localhost:4200](http://localhost:4200)
 * **Backend Quarkus:** [http://localhost:8080](http://localhost:8080)
-* **Keycloak:** [http://localhost:8081](http://localhost:8081)
+* **Keycloak:** [http://localhost:8080](http://localhost:8080)
 
 > Nenhuma instalação local de Node, Maven ou Java é necessária — todo o ambiente é executado em containers Docker.
 

@@ -8,4 +8,5 @@ public interface BaseRepositoryPort<D, ID> {
     List<D> listarTodos();
     void salvar(D domain);
     boolean excluirPorIdentifier(ID identifier);
+    void atualizar(D domain, ID identifier);
 }
