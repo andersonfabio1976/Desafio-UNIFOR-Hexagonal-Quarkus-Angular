@@ -70,9 +70,10 @@ desafio-unifor-hexagonal-quarkus-angular/
 - Docker e Docker Compose instalados.
 
 **Comando único para subir o ambiente:**
+
 ```bash
 docker-compose up -d
-````
+```
 
 **Acessos:**
 
