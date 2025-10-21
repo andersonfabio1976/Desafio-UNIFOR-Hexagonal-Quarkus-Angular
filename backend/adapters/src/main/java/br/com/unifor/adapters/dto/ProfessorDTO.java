@@ -1,17 +1,22 @@
 package br.com.unifor.adapters.dto;
 
 import br.com.unifor.domain.model.Disciplina;
+import br.com.unifor.domain.model.Usuario;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.List;
 
-public record ProfessorDTO(
-        Long identifier,
-        String nome,
-        String email,
-        String area,
-        List<Disciplina> disciplinas,
-        Boolean coordenador,
-        Instant createdOn,
-        Instant updatedOn
-        ) {}
+@Getter
+@Setter
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProfessorDTO extends AuditableDTO {
+    private String nome;
+    private String email;
+    private String area;
+    private Boolean coordenador;
+    private UsuarioDTO usuario;
+}

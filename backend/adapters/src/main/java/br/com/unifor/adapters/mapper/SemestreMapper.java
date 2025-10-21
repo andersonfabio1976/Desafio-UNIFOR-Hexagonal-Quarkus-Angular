@@ -3,14 +3,11 @@ package br.com.unifor.adapters.mapper;
 import br.com.unifor.adapters.dto.SemestreDTO;
 import br.com.unifor.adapters.repository.entity.SemestreEntity;
 import br.com.unifor.domain.model.Semestre;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
+
 import java.util.List;
 
-@Mapper(componentModel = "cdi")
-public interface SemestreMapper {
-    Semestre toDomain(SemestreEntity entity);
-    SemestreEntity toEntity(Semestre domain);
-    SemestreDTO toDTO(Semestre domain);
-    List<SemestreDTO> toDTO(List<Semestre> domain);
-    Semestre toDomain(SemestreDTO dto);
+@Mapper(componentModel = "cdi", uses = { CursoMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface SemestreMapper extends BaseMapper<SemestreEntity, Semestre, SemestreDTO> {
+
 }

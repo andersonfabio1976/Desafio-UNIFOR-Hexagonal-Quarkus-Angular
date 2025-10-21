@@ -1,0 +1,26 @@
+/* Reusa o mesmo shell visual do Admin (barra superior + sidenav azul + espaçamentos) */
+@import '../../../core/layout/layout.component.scss';
+
+/* Ajustes pontuais desta área (se necessário) */
+.side-nav-list {
+  padding-top: 8px;
+}
+
+.section-title {
+  font-weight: 600;
+  margin: 8px 16px;
+}
+
+.nav-item mat-icon {
+  margin-right: 12px;
+}
+
+.nav-item.exit {
+  color: #d32f2f;
+}
+
+.page-title {
+  margin: 8px 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+}

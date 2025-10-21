@@ -1,0 +1,49 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>Matriz Curricular</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Curso</mat-label>
+            <mat-select formControlName="cursoId">
+              <mat-option [value]="null">-- Selecione --</mat-option>
+              <mat-option *ngFor="let c of cursos" [value]="c.identifier">
+                {{ c.nome || ('#' + c.identifier) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <table mat-table [dataSource]="matriz" class="mat-elevation-z1" *ngIf="matriz?.length">
+        <ng-container matColumnDef="periodo">
+          <th mat-header-cell *matHeaderCellDef>Período</th>
+          <td mat-cell *matCellDef="let i">{{ i.periodo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="disciplina">
+          <th mat-header-cell *matHeaderCellDef>Disciplina</th>
+          <td mat-cell *matCellDef="let i">{{ i.disciplina }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cargaHoraria">
+          <th mat-header-cell *matHeaderCellDef>Carga Horária</th>
+          <td mat-cell *matCellDef="let i">{{ i.cargaHoraria ?? '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="professor">
+          <th mat-header-cell *matHeaderCellDef>Professor</th>
+          <td mat-cell *matCellDef="let i">{{ i.professor }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['periodo','disciplina','cargaHoraria','professor']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['periodo','disciplina','cargaHoraria','professor'];"></tr>
+      </table>
+
+      <div *ngIf="!matriz?.length && form.value.cursoId">
+        Nenhum item para este curso.
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

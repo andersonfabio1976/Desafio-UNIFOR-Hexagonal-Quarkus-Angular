@@ -1,11 +1,14 @@
 package br.com.unifor.adapters.repository.impl;
 
+import br.com.unifor.adapters.dto.CursoDTO;
 import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.adapters.repository.entity.CursoEntity;
 import br.com.unifor.application.port.repository.CursoRepositoryPort;
 import br.com.unifor.domain.model.Curso;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @ApplicationScoped
 public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, Curso>
@@ -15,7 +18,8 @@ public class CursoRepositoryAdapter extends BaseRepositoryAdapter<CursoEntity, C
 
     @jakarta.inject.Inject
     public CursoRepositoryAdapter(CursoMapper mapper) {
-        super(mapper::toDomain, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
+
 }

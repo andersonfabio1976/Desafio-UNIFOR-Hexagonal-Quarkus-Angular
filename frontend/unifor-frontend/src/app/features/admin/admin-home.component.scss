@@ -1,0 +1,77 @@
+/* garante altura total */
+html, body, app-root, .admin-sidenav-container {
+  height: 100%;
+}
+
+/* container principal do layout */
+.admin-sidenav-container {
+  height: 100vh;
+}
+
+/* IMPORTANTE: quem pinta o fundo do sidenav é o container interno */
+.admin-sidenav .mat-drawer-inner-container {
+  width: 220px;
+  background-color: #1565c0; /* azul */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* título */
+.admin-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
+}
+
+/* menu */
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  min-height: 0;
+  flex: 1;
+}
+
+.admin-menu a.mat-button {
+  display: block;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.admin-menu a:hover,
+.admin-menu a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* empurra o botão sair para o rodapé */
+.menu-spacer {
+  flex: 1 1 auto;
+}
+
+.admin-menu button {
+  width: 80%;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* área do conteúdo ocupa 100% */
+.admin-content {
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: #f7f7f7;
+}
