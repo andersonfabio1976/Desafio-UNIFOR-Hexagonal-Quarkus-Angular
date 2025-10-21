@@ -1,33 +1,38 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
-import { MaterialModule } from 'src/app/shared/material.module';
-
-// Páginas
-import { AdminHomeComponent } from './admin-home.component';
 import { AlunosComponent } from './pages/alunos/alunos.component';
-import { CursosComponent } from './pages/cursos/cursos.component';
 import { ProfessoresComponent } from './pages/professores/professores.component';
-import { MatriculasComponent } from './pages/matriculas/matriculas.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
-    AdminHomeComponent,
     AlunosComponent,
-    CursosComponent,
-    ProfessoresComponent,
-    MatriculasComponent,
-    UsuariosComponent
+    ProfessoresComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     AdminRoutingModule,
-    MaterialModule
-  ],
-  providers: [DatePipe]
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCheckboxModule // <-- necessário para <mat-checkbox>
+  ]
 })
 export class AdminModule {}

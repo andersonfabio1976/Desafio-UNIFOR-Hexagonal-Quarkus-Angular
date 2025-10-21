@@ -10,9 +10,10 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-@Builder
-public class Disciplina {
-    private Long identifier;
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Disciplina extends AuditableModel {
     private String nome;
     private Professor professor;
     private Curso curso;

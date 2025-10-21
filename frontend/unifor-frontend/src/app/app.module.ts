@@ -1,52 +1,49 @@
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { TokenInterceptor } from './core/auth/token.interceptor';
-import { LayoutModule } from './core/layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { environment } from '../environments/environment';
-
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: environment.keycloak.url,
-        realm: environment.keycloak.realm,
-        clientId: environment.keycloak.clientId
-      },
-      initOptions: {
-        onLoad: 'login-required',
-        checkLoginIframe: false
-      }
-    });
-}
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { initializeKeycloak } from './core/auth/keycloack-init.factory';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // ALTERAÇÃO: HTTP_INTERCEPTORS
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { TokenInterceptor } from './core/auth/token.interceptor'; // ALTERAÇÃO: interceptor
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    LayoutModule,
+    AppRoutingModule,
     KeycloakAngularModule,
-    AppRoutingModule
+    MatSidenavModule,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    HttpClientModule,
+    CoreModule
   ],
   providers: [
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService]
+      deps: [KeycloakService],
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
+      multi: true,
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

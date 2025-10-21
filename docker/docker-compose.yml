@@ -68,6 +68,20 @@ services:
     networks:
       - unifor-network
 
+  unifor-frontend:
+    build:
+      context: ../frontend/unifor-frontend
+      dockerfile: Dockerfile
+    container_name: unifor-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - unifor-backend
+    networks:
+      - unifor-network
+
+
+
 networks:
   unifor-network:
     driver: bridge

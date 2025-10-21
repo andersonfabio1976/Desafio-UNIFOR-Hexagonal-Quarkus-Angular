@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import java.time.LocalDate;
 
-//@QuarkusTest necessário descomentar ao habilitar o teste
+//@QuarkusTest necessário descomentar ao habilitar o teste integrado
 public class AlunoServiceIntegrationTest extends BaseServiceTest<Aluno, AlunoRepositoryPort, AlunoService> {
 
     private boolean useMock = true; // Setar para false

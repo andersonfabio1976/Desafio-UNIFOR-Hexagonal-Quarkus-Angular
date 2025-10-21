@@ -1,28 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LayoutComponent implements OnInit {
-  isAdmin = false;
-  isCoordenador = false;
-  isProfessor = false;
-  isAluno = false;
+  constructor(public auth: AuthService, private router: Router) {}
 
-  constructor(private keycloak: KeycloakService) {}
-
-  async ngOnInit() {
-    const roles = this.keycloak.getUserRoles();
-    this.isAdmin = roles.includes('admin');
-    this.isCoordenador = roles.includes('coordenador');
-    this.isProfessor = roles.includes('professor');
-    this.isAluno = roles.includes('aluno');
+  ngOnInit(): void {
+    try { this.auth.debugPrintClaims(); } catch {}
   }
 
-  async logout() {
-    await this.keycloak.logout(window.location.origin);
+  isAdmin(): boolean {
+    return this.auth.hasAnyRole(['ADMIN', 'ROLE_ADMIN', 'ADMINISTRADOR', 'ROLE_ADMINISTRADOR']);
   }
+  isCoord(): boolean {
+    return this.auth.hasAnyRole(['COORDENADOR', 'ROLE_COORDENADOR', 'COORDINATOR']);
+  }
+  isProfessorNaoCoord(): boolean {
+    return this.auth.hasAnyRole(['PROFESSOR', 'ROLE_PROFESSOR', 'DOCENTE', 'TEACHER']) && !this.isCoord();
+  }
+  isAluno(): boolean {
+    return this.auth.hasAnyRole(['ALUNO', 'ROLE_ALUNO', 'ESTUDANTE', 'STUDENT']);
+  }
+
+  private urlStarts(path: string): boolean { try { return this.router.url?.startsWith(path); } catch { return false; } }
+  showAdminSection(): boolean { return this.isAdmin() || this.urlStarts('/admin'); }
+  showCoordSection(): boolean { return this.isCoord()  || this.urlStarts('/coord'); }
+  showProfessorSection(): boolean { return this.isProfessorNaoCoord() || this.urlStarts('/prof');}
+  showAlunoSection(): boolean { return this.isAluno() || this.urlStarts('/aluno'); }
 }

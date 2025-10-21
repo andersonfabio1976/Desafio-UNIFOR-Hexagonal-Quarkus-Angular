@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.util.List;
 
 @Entity
 @Table(name = "semestre")
@@ -16,13 +15,6 @@ import java.util.List;
 public class SemestreEntity extends AuditableEntity {
 
     private int numero;
-
-    @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatriculaEntity> matriculas;
-
-    @OneToMany(mappedBy = "semestre")
-    private List<DisciplinaEntity> disciplinas;
-
 
     @ManyToOne
     private CursoEntity curso;

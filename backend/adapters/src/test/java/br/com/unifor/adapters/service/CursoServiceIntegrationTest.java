@@ -9,7 +9,7 @@ import jakarta.enterprise.inject.spi.CDI;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-//@QuarkusTest necessário descomentar ao habilitar o teste
+//@QuarkusTest necessário descomentar ao habilitar o teste integrado
 public class CursoServiceIntegrationTest extends BaseServiceTest<Curso, CursoRepositoryPort, CursoService> {
 
     private boolean useMock = true; // Setar para false

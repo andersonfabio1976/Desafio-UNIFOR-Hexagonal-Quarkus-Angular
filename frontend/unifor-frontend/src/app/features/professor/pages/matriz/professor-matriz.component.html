@@ -1,0 +1,43 @@
+<mat-card class="matriz-card" appearance="outlined">
+  <div class="header">
+    <h2 class="title">Matriz Curricular (Professor)</h2>
+    <div class="right-info">
+      <span class="hint">Somente disciplinas sob sua responsabilidade</span>
+    </div>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="loading" class="skeleton">
+    <div class="row"></div>
+    <div class="row"></div>
+  </div>
+
+  <div class="grid header-row" role="row">
+    <div class="cell h">Período</div>
+    <div class="cell h">Disciplina</div>
+    <div class="cell h">Carga Horária</div>
+    <div class="cell h">Responsável</div>
+    <div class="cell h right">Turmas</div>
+    <div class="cell h">Semestre</div>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="(rows$ | async) as rows; else empty">
+      <div *ngFor="let r of rows; trackBy: trackByRow" class="grid body-row" role="row">
+        <div class="cell">{{ r.periodo }}º</div>
+        <div class="cell strong">{{ r.disciplina }}</div>
+        <div class="cell">{{ r.cargaHoraria }}h</div>
+        <div class="cell">{{ r.responsavel }}</div>
+        <div class="cell right">{{ r.turmas ?? '-' }}</div>
+        <div class="cell">{{ r.semestreLetivo ?? '-' }}</div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="empty">
+      <mat-icon>info</mat-icon>
+      <span>Você não possui disciplinas vinculadas nesta matriz/semestre.</span>
+    </div>
+  </ng-template>
+</mat-card>

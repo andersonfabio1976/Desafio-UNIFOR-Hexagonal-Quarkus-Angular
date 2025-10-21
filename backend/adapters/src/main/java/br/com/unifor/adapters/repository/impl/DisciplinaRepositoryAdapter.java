@@ -1,10 +1,13 @@
 package br.com.unifor.adapters.repository.impl;
 
+import br.com.unifor.adapters.dto.MatrizItemDTO;
 import br.com.unifor.adapters.mapper.DisciplinaMapper;
 import br.com.unifor.adapters.repository.entity.DisciplinaEntity;
 import br.com.unifor.application.port.repository.DisciplinaRepositoryPort;
 import br.com.unifor.domain.model.Disciplina;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
 
 @ApplicationScoped
 public class DisciplinaRepositoryAdapter
@@ -13,8 +16,46 @@ public class DisciplinaRepositoryAdapter
 
     private final DisciplinaMapper mapper;
 
+    @jakarta.inject.Inject
     public DisciplinaRepositoryAdapter(DisciplinaMapper mapper) {
-        super(mapper::toDomainFromEntity, mapper::toEntity);
+        super(mapper::toDomainFromEntity, mapper::toEntity, mapper::toUpdateEntityMapper);
         this.mapper = mapper;
     }
+
+    public List<MatrizItemDTO> listMatrizByCurso(Long cursoId) {
+        return find("""
+                select new br.com.unifor.adapters.dto.MatrizItemDTO(
+                    s.numero,
+                    d.nome,
+                    d.cargaHoraria,
+                    coalesce(p.nome, 'Departamento')
+                )
+                from DisciplinaEntity d
+                  left join d.professor p
+                  left join d.semestre s
+                where d.curso.identifier = :cursoId
+                order by s.numero asc, d.nome asc
+                """,
+                Parameters.with("cursoId", cursoId)
+        ).project(MatrizItemDTO.class).list();
+    }
+
+    public List<MatrizItemDTO> listMatrizByProfessor(Long professorId) {
+        return find("""
+                select new br.com.unifor.adapters.dto.MatrizItemDTO(
+                    s.numero,
+                    d.nome,
+                    d.cargaHoraria,
+                    coalesce(p.nome, 'Departamento')
+                )
+                from DisciplinaEntity d
+                  left join d.professor p
+                  left join d.semestre s
+                where p.identifier = :profId
+                order by s.numero asc, d.nome asc
+                """,
+                Parameters.with("profId", professorId)
+        ).project(MatrizItemDTO.class).list();
+    }
+
 }
