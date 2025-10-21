@@ -1,8 +1,6 @@
 package br.com.unifor.adapters.repository.impl;
 
-import br.com.unifor.adapters.repository.entity.UsuarioEntity;
 import br.com.unifor.application.port.repository.BaseRepositoryPort;
-import br.com.unifor.domain.model.Usuario;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;

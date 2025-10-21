@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AlunoDTO } from './aluno.dto';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AlunosService {
   private baseUrl = `${environment.apiUrl}/alunos`;
 
@@ -20,16 +18,24 @@ export class AlunosService {
     return this.http.get<AlunoDTO>(`${this.baseUrl}/${id}`);
   }
 
+  private buildPayload(dto: AlunoDTO): any {
+    const cursoId = dto.curso?.identifier ?? null;
+    return {
+      ...dto,
+      curso: cursoId ? { identifier: Number(cursoId) } : null,
+      cursoIdentifier: cursoId ? Number(cursoId) : null
+    };
+  }
+
   salvar(dto: AlunoDTO): Observable<AlunoDTO> {
+    const payload = this.buildPayload(dto);
     if (dto.identifier) {
-      // ✅ corrigido aqui
-      return this.http.put<AlunoDTO>(`${this.baseUrl}/${dto.identifier}`, dto);
+      return this.http.put<AlunoDTO>(`${this.baseUrl}/${dto.identifier}`, payload);
     }
-    return this.http.post<AlunoDTO>(this.baseUrl, dto);
+    return this.http.post<AlunoDTO>(this.baseUrl, payload);
   }
 
   remover(id: number): Observable<void> {
-    // ✅ corrigido aqui também
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

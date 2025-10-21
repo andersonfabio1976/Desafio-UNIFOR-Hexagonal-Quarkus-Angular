@@ -11,11 +11,9 @@ public class KeycloakAdminClientProvider {
     @ConfigProperty(name = "keycloak.server-url")
     String serverUrl;
 
-    // Realm usado para obter o token do admin (normalmente "master")
     @ConfigProperty(name = "keycloak.admin-realm", defaultValue = "master")
     String adminRealm;
 
-    // Realm alvo (onde você gerencia usuários, ex.: "unifor-realm")
     @ConfigProperty(name = "keycloak.realm")
     String targetRealm;
 
@@ -37,7 +35,6 @@ public class KeycloakAdminClientProvider {
         }
         return KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
-                // Realm para autenticação do admin (não é o realm alvo)
                 .realm(adminRealm)
                 .clientId(clientId)
                 .username(username)

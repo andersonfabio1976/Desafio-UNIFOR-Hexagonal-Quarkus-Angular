@@ -1,14 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { AdminRoutingModule } from './admin-routing.module';
-
-// Páginas
 import { AlunosComponent } from './pages/alunos/alunos.component';
 import { ProfessoresComponent } from './pages/professores/professores.component';
-
-// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,8 +24,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     ReactiveFormsModule,
     AdminRoutingModule,
-
-    // Material
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

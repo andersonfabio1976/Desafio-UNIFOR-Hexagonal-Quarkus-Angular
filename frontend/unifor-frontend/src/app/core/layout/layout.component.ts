@@ -12,7 +12,6 @@ export class LayoutComponent implements OnInit {
   constructor(public auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Loga payload e roles no console do navegador para ajuste fino dos guards
     try { this.auth.debugPrintClaims(); } catch {}
   }
 

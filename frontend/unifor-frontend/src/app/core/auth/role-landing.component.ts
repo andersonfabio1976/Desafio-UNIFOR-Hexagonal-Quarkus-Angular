@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 @Component({
-  // Standalone para não precisar mexer em módulos
   standalone: true,
   selector: 'app-role-landing',
   template: `<p style="margin:16px">Redirecionando...</p>`,
@@ -13,6 +12,17 @@ export class RoleLandingComponent {
     this.redirect();
   }
 
+  private norm(v: string): string {
+    if (!v) return '';
+    let x = v.toUpperCase().trim();
+    x = x.replace(/^ROLE_/, '').replace(/^GROUP_/, '').replace(/^SCOPE_/, '');
+    if (x === 'ADMINISTRADOR') x = 'ADMIN';
+    if (x === 'COORDINATOR') x = 'COORDENADOR';
+    if (x === 'DOCENTE' || x === 'TEACHER') x = 'PROFESSOR';
+    if (x === 'ESTUDANTE' || x === 'STUDENT') x = 'ALUNO';
+    return x.replace(/[^A-Z0-9_]/g, '');
+  }
+
   private async redirect() {
     const logged = await this.kc.isLoggedIn();
     if (!logged) {
@@ -20,17 +30,23 @@ export class RoleLandingComponent {
       return;
     }
 
-    const roles = this.kc.getUserRoles();
-    const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
-    const isCoord =
-      roles.includes('COORDENADOR') || roles.includes('ROLE_COORDENADOR');
-
-    if (isAdmin) {
+    const rolesRaw = this.kc.getUserRoles(true);
+    const roles = new Set(rolesRaw.map(r => this.norm(r)));
+    console.log('[RoleLanding] roles:', rolesRaw);
+    if (roles.has('ADMIN')) {
       this.router.navigateByUrl('/admin');
       return;
     }
-    if (isCoord) {
+    if (roles.has('COORDENADOR')) {
       this.router.navigateByUrl('/coord');
+      return;
+    }
+    if (roles.has('PROFESSOR')) {
+      this.router.navigateByUrl('/prof');
+      return;
+    }
+    if (roles.has('ALUNO')) {
+      this.router.navigateByUrl('/aluno');
       return;
     }
 

@@ -1,9 +1,12 @@
 package br.com.unifor.adapters.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
+@SuperBuilder
+@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 public class MatrizItemDTO {
     private Integer periodo;

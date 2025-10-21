@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { AdminGuard } from './core/auth/admin.guard';
 import { CoordenadorGuard } from './core/auth/coordenador.guard';
-// Substituímos temporariamente ProfessorGuard/AlunoGuard pelo guard de autenticado
-import { AuthenticatedGuard } from './core/auth/authenticated.guard';
+import { AlunoGuard } from './core/auth/aluno.guard';
+import { ProfessorGuard } from './core/auth/professor.guard';
 
 const routes: Routes = [
   {
@@ -17,7 +17,6 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'admin', pathMatch: 'full' },
       {
         path: 'admin',
         canActivate: [AdminGuard],
@@ -32,21 +31,19 @@ const routes: Routes = [
         loadChildren: () =>
           import('./features/coordenador/coordenador.module').then((m) => m.CoordenadorModule),
       },
-      // PROVISÓRIO: permitir professor autenticado (sem exigir role) para destravar
-      {
-        path: 'prof/matriz',
-        canActivate: [AuthenticatedGuard],
-        loadChildren: () =>
-          import('./features/coordenador/pages/matriz/matriz.module').then((m) => m.MatrizModule),
-      },
-      // PROVISÓRIO: permitir aluno autenticado (sem exigir role) para destravar
-      {
-        path: 'aluno/matriz',
-        canActivate: [AuthenticatedGuard],
-        loadChildren: () =>
-          import('./features/coordenador/pages/matriz/matriz.module').then((m) => m.MatrizModule),
-      },
     ],
+  },
+  {
+    path: 'prof',
+    canActivate: [ProfessorGuard],
+    loadChildren: () =>
+      import('./features/professor/professor.module').then((m) => m.ProfessorModule),
+  },
+  {
+    path: 'aluno',
+    canActivate: [AlunoGuard],
+    loadChildren: () =>
+      import('./features/aluno/aluno.module').then((m) => m.AlunoModule),
   },
   {
     path: 'acesso-negado',
@@ -58,6 +55,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -1,12 +1,7 @@
 package br.com.unifor.adapters.dto;
 
-import br.com.unifor.domain.model.Disciplina;
-import br.com.unifor.domain.model.Usuario;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.Instant;
-import java.util.List;
 
 @Getter
 @Setter

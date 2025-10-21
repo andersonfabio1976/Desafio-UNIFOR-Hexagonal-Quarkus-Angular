@@ -6,7 +6,9 @@ import br.com.unifor.adapters.integration.UsuarioService;
 import br.com.unifor.adapters.mapper.AlunoMapper;
 import br.com.unifor.adapters.mapper.UsuarioMapper;
 import br.com.unifor.application.service.AlunoService;
+import br.com.unifor.application.service.CursoService;
 import br.com.unifor.domain.model.Aluno;
+import br.com.unifor.domain.model.Curso;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -19,12 +21,14 @@ import java.util.List;
 @Path("/alunos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-//@RolesAllowed({"ADMIN", "ROLE_ADMIN", "ROLE_ADMINISTRADOR"})
 @PermitAll
 public class AlunoController {
 
     @Inject
     AlunoService service;
+
+    @Inject
+    CursoService cursoService;
 
     @Inject
     UsuarioService usuarioService;
@@ -52,9 +56,18 @@ public class AlunoController {
     @Transactional
     public Response salvar(AlunoDTO dto) {
         UsuarioDTO usuarioCriado = usuarioService.criarUsuarioComKeycloak(dto.getUsuario(), "ALUNO");
-        usuarioCriado = usuarioMapper.toDTO(usuarioService.buscarPorUserNameRealm(usuarioCriado.getUsername()).get());
+        usuarioCriado = usuarioMapper.toDTO(
+                usuarioService.buscarPorUserNameRealm(usuarioCriado.getUsername()).orElseThrow()
+        );
         dto.setUsuario(usuarioCriado);
         Aluno aluno = mapper.toDomainFromDTO(dto);
+
+        Long cursoId = resolveCursoId(dto);
+        if (cursoId != null) {
+            Curso curso = cursoService.buscarPorIdentifier(cursoId)
+                    .orElseThrow(() -> new NotFoundException("Curso não encontrado: " + cursoId));
+            aluno.setCurso(curso);
+        }
         service.salvar(aluno);
         AlunoDTO resposta = mapper.toDTO(aluno);
 
@@ -71,9 +84,8 @@ public class AlunoController {
     @Path("/{identifier}")
     @Transactional
     public Response atualizar(@PathParam("identifier") Long identifier, AlunoDTO dto) {
-        var atual = service.buscarPorIdentifier(identifier)
+        Aluno atual = service.buscarPorIdentifier(identifier)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado: " + identifier));
-
         if (dto.getUsuario() != null) {
             if (dto.getUsuario().getIdentifier() == null && atual.getUsuario() != null) {
                 dto.getUsuario().setIdentifier(atual.getUsuario().getIdentifier());
@@ -81,7 +93,18 @@ public class AlunoController {
             usuarioService.atualizarUsuario(dto.getUsuario(), dto.getUsuario().getIdentifier());
         }
 
-        service.atualizar(mapper.toDomainFromDTO(dto), identifier);
+        Aluno atualizado = mapper.toDomainFromDTO(dto);
+
+        Long cursoId = resolveCursoId(dto);
+        if (cursoId != null) {
+            Curso curso = cursoService.buscarPorIdentifier(cursoId)
+                    .orElseThrow(() -> new NotFoundException("Curso não encontrado: " + cursoId));
+            atualizado.setCurso(curso);
+        } else {
+            atualizado.setCurso(atual.getCurso());
+        }
+
+        service.atualizar(atualizado, identifier);
         return Response.noContent().build();
     }
 
@@ -92,7 +115,6 @@ public class AlunoController {
         Aluno aluno = service.buscarPorIdentifier(identifier)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-        // Null-safety: só tenta excluir no KC se houver usuário associado
         if (aluno.getUsuario() != null && aluno.getUsuario().getIdentifier() != null) {
             usuarioService.excluirUsuario(aluno.getUsuario().getIdentifier());
         }
@@ -102,5 +124,23 @@ public class AlunoController {
             throw new NotFoundException("Aluno não encontrado");
         }
         return Response.noContent().build();
+    }
+
+    private Long resolveCursoId(AlunoDTO dto) {
+        if (dto == null) return null;
+        try {
+            if (dto.getCurso() != null && dto.getCurso().getIdentifier() != null) {
+                return dto.getCurso().getIdentifier();
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            var m = dto.getClass().getMethod("getCursoIdentifier");
+            Object v = m.invoke(dto);
+            if (v instanceof Long) return (Long) v;
+            if (v instanceof Number) return ((Number) v).longValue();
+        } catch (Exception ignored) {}
+
+        return null;
     }
 }

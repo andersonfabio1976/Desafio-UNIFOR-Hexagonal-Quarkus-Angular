@@ -85,8 +85,8 @@ docker-compose up -d
 
 **Acessos:**
 
-* **Frontend Angular:** [http://localhost:1000](http://localhost:1000)
-* **Backend Quarkus + Swagger:** [http://localhost:8081/swagger-ui](http://localhost:8081/q/swagger-ui)
+* **Frontend Angular:** [http://localhost:4200](http://localhost:4200)
+* **Backend Quarkus + Swagger:** [http://localhost:8081/q/swagger-ui](http://localhost:8081/q/swagger-ui)
 * **Keycloak:** [http://localhost:8080](http://localhost:8080)
 
 > Nenhuma instalação local de Node, Maven ou Java é necessária — todo o ambiente é executado em containers Docker.

@@ -19,6 +19,7 @@ public class Aluno extends AuditableModel {
     private String email;
     private LocalDate dataNascimento;
     private Usuario usuario;
+    private Curso curso;
 
 
     public boolean isMaiorDeIdade() {

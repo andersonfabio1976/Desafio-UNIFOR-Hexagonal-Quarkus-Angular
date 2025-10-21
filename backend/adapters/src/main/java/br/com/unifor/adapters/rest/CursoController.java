@@ -1,7 +1,6 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.CursoDTO;
-import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.CursoMapper;
 import br.com.unifor.application.service.CursoService;
 import br.com.unifor.domain.model.Curso;
@@ -17,7 +16,6 @@ import java.util.List;
 @Path("/Cursos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-//@RolesAllowed({"ADMIN", "ROLE_ADMINISTRADOR"})
 @PermitAll
 public class CursoController {
 

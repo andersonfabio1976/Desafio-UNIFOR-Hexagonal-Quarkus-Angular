@@ -9,17 +9,14 @@ export class RoleGuard extends KeycloakAuthGuard {
   }
 
   async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
-    // 1) precisa estar logado
     if (!this.authenticated) {
       await this.keycloakAngular.login({ redirectUri: window.location.href });
       return false;
     }
-
-    // 2) verifica roles esperadas
     const expectedRoles: string[] = route.data['roles'] ?? [];
     if (expectedRoles.length === 0) return true;
 
-    const userRoles = this.roles; // do KeycloakAuthGuard
+    const userRoles = this.roles;
     const ok = expectedRoles.some((r) => userRoles.includes(r));
     if (!ok) {
       // Redireciona para uma página de acesso negado

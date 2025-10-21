@@ -6,8 +6,6 @@ import br.com.unifor.domain.model.Semestre;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
-
 @SuperBuilder
 @NoArgsConstructor
 @Getter

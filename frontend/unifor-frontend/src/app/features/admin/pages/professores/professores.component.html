@@ -88,9 +88,6 @@
         <tr mat-header-row *matHeaderRowDef="['nome', 'email', 'coordenador', 'acoes']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['nome', 'email', 'coordenador', 'acoes'];"></tr>
       </table>
-    </div>
-    <ng-template #loadingTpl>
-      <div class="loading">Carregando...</div>
-    </ng-template>
+    </mat-card-content>
   </mat-card>
 </div>

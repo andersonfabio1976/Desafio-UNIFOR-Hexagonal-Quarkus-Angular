@@ -3,7 +3,6 @@ package br.com.unifor.adapters.integration;
 import br.com.unifor.adapters.config.KeycloakAdminClientProvider;
 import br.com.unifor.adapters.dto.UsuarioDTO;
 import br.com.unifor.adapters.mapper.UsuarioMapper;
-import br.com.unifor.adapters.repository.entity.UsuarioEntity;
 import br.com.unifor.domain.model.Usuario;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -14,9 +13,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -99,7 +96,6 @@ public class UsuarioService {
 
     @Transactional
     public void excluirUsuario(Long identifier) {
-        // Busca o usuário no banco
         Usuario usuario = usuarioRepository.buscarPorIdentifier(identifier)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
@@ -108,7 +104,7 @@ public class UsuarioService {
         String realm = kcProvider.getTargetRealm();
         UsersResource users = kc.realm(realm).users();
 
-        // Fallback: se o keycloakIdentifier não estiver salvo, tenta resolver por username/email
+
         if (kcId.isBlank()) {
             String username = safe(usuario.getUsername());
             String email = safe(usuario.getEmail());
@@ -121,7 +117,6 @@ public class UsuarioService {
             }
         }
 
-        // Remove no Keycloak se tivermos o ID
         if (!kcId.isBlank()) {
             try {
                 users.get(kcId).remove();
@@ -133,7 +128,6 @@ public class UsuarioService {
                     identifier, usuario.getUsername(), usuario.getEmail());
         }
 
-        // Remove do banco
         usuarioRepository.excluirPorIdentifier(identifier);
     }
 

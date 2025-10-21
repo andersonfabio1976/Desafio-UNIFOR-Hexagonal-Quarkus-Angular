@@ -1,7 +1,6 @@
 package br.com.unifor.adapters.rest;
 
 import br.com.unifor.adapters.dto.DisciplinaDTO;
-import br.com.unifor.adapters.dto.ProfessorDTO;
 import br.com.unifor.adapters.mapper.DisciplinaMapper;
 import br.com.unifor.application.service.DisciplinaService;
 import br.com.unifor.domain.model.Disciplina;
@@ -17,7 +16,6 @@ import java.util.List;
 @Path("/Disciplinas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-//@RolesAllowed({"ADMIN", "ROLE_ADMIN", "ROLE_ADMINISTRADOR"})
 @PermitAll
 public class DisciplinaController {
 

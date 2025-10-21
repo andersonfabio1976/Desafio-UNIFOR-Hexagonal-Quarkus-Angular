@@ -14,7 +14,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;

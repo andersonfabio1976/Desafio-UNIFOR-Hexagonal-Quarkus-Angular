@@ -9,7 +9,6 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    // Se seu component for standalone, não precisa declarar em declarations
   ]
 })
 export class AccessDeniedModule {}

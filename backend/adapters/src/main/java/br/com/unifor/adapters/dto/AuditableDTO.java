@@ -1,9 +1,7 @@
 package br.com.unifor.adapters.dto;
 
-import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.time.Instant;
 
 @SuperBuilder

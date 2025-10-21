@@ -1,13 +1,10 @@
 package br.com.unifor.adapters.repository.impl;
 
-import br.com.unifor.adapters.dto.AlunoDTO;
 import br.com.unifor.adapters.mapper.AlunoMapper;
 import br.com.unifor.adapters.repository.entity.AlunoEntity;
 import br.com.unifor.application.port.repository.AlunoRepositoryPort;
 import br.com.unifor.domain.model.Aluno;
 import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.Optional;
 
 @ApplicationScoped
 public class AlunoRepositoryAdapter extends BaseRepositoryAdapter<AlunoEntity, Aluno>

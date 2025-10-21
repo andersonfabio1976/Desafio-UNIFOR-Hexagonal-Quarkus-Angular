@@ -3,7 +3,6 @@ package br.com.unifor.adapters.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.time.Instant;
 
 @SuperBuilder

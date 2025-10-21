@@ -11,7 +11,6 @@ import { CursoComponent } from './curso.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCardModule,
     RouterModule.forChild([{ path: '', component: CursoComponent }]),
     MaterialModule
   ]

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlunosService } from './alunos.service';
 import { AlunoDTO } from '../alunos/aluno.dto';
-import { LookupService, IdName } from '../../../../shared/lookup.service'; // usar lookup para listar cursos
+import { LookupService, IdName } from '../../../../shared/lookup.service';
 
 @Component({
   selector: 'app-alunos',
@@ -12,8 +12,7 @@ import { LookupService, IdName } from '../../../../shared/lookup.service'; // us
 export class AlunosComponent implements OnInit {
   form!: FormGroup;
   alunos: AlunoDTO[] = [];
-  cursos: IdName[] = []; // dropdown de cursos
-
+  cursos: IdName[] = [];
   carregando = false;
   saving = false;
   editing = false;
@@ -26,11 +25,11 @@ export class AlunosComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(2)]],
+      identifier: [null],
+      nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      // input type="date" devolve string (yyyy-MM-dd). Se virar Date em algum momento, normalizamos no salvar().
       dataNascimento: ['', Validators.required],
-      cursoId: [null, Validators.required], // novo campo
+      cursoId: [null, Validators.required],
       usuario: this.fb.group({
         identifier: [null],
         username: ['', Validators.required],
@@ -43,9 +42,7 @@ export class AlunosComponent implements OnInit {
     this.listar();
   }
 
-  get f() {
-    return this.form.controls as { [key: string]: any };
-  }
+  get f() { return this.form.controls as any; }
 
   private carregarLookups(): void {
     this.lookup.cursos().subscribe({
@@ -54,15 +51,12 @@ export class AlunosComponent implements OnInit {
     });
   }
 
-  load() {
-    this.alunosService.listarTodos().subscribe({
-      next: (list) => {
-        this.alunos = list ?? [];
-      },
-      error: (err) => {
-        console.error('Falha ao listar alunos', err);
-        alert('Falha ao carregar a lista de alunos.');
-      },
+  listar(): void {
+    this.carregando = true;
+    this.service.listarTodos().subscribe({
+      next: (res) => (this.alunos = res),
+      error: (err) => console.error(err),
+      complete: () => (this.carregando = false)
     });
   }
 
@@ -75,8 +69,12 @@ export class AlunosComponent implements OnInit {
     this.saving = true;
     const raw = this.form.value;
 
-    // Converte ddMMyyyy → yyyy-MM-dd caso venha sem hífens
     let dataFormatada = raw.dataNascimento;
+    if (dataFormatada && /^\d{2}\/\d{2}\/\d{4}$/.test(dataFormatada)) {
+      // dd/MM/yyyy -> yyyy-MM-dd
+      const [dia, mes, ano] = dataFormatada.split('/');
+      dataFormatada = `${ano}-${mes}-${dia}`;
+    }
     if (dataFormatada && /^\d{8}$/.test(dataFormatada)) {
       const dia = dataFormatada.substring(0, 2);
       const mes = dataFormatada.substring(2, 4);
@@ -86,18 +84,18 @@ export class AlunosComponent implements OnInit {
 
     const dto: AlunoDTO = {
       identifier: raw.identifier ?? undefined,
-      nome: raw.nome.trim(),
-      email: raw.email.trim(),
+      nome: raw.nome?.trim(),
+      email: raw.email?.trim(),
       dataNascimento: dataFormatada,
       curso: raw.cursoId ? { identifier: Number(raw.cursoId), nome: '' } as any : undefined,
       usuario: {
-        identifier: raw.usuario.identifier ?? undefined,
-        username: raw.usuario.username.trim(),
-        firstName: raw.nome.trim(),
+        identifier: raw?.usuario?.identifier ?? undefined,
+        username: raw?.usuario?.username?.trim(),
+        firstName: raw.nome?.trim(),
         lastName: '',
-        email: raw.email.trim(),
-        password: raw.usuario.password
-      }
+        email: raw.email?.trim(),
+        password: raw?.usuario?.password
+      } as any
     };
 
     this.service.salvar(dto).subscribe({
@@ -131,19 +129,19 @@ export class AlunosComponent implements OnInit {
     });
   }
 
-  cancelar() {
+  cancelar(): void {
     this.form.reset();
     this.editing = false;
   }
 
-  remover(id: number) {
-    if (confirm('Deseja remover este aluno?')) {
-      this.alunosService.remover(id).subscribe({
-        next: () => this.load(),
+  remover(id: number): void {
+    if (confirm('Confirma a exclusão do aluno?')) {
+      this.service.remover(id).subscribe({
+        next: () => this.listar(),
         error: (err) => {
-          console.error('Falha ao remover aluno', err);
-          alert('Falha ao remover aluno.');
-        },
+          console.error('❌ Erro ao remover aluno', err);
+          alert('Erro ao remover aluno.');
+        }
       });
     }
   }

@@ -16,11 +16,14 @@ export class AuthGuard implements CanActivate {
     }
 
     const userRoles = this.keycloak.getUserRoles();
-    const hasAccess = userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_COORDENADOR');
+    const hasAccess = userRoles.includes('ADMIN') ||
+      userRoles.includes('COORDENADOR') ||
+    userRoles.includes('PROFESSOR') ||
+    userRoles.includes('ALUNO');
 
     if (!hasAccess) {
       console.warn('Acesso negado: usuário sem permissão de administrador.');
-      this.router.navigate(['/']); // redireciona para home
+      this.router.navigate(['/']);
       return false;
     }
 

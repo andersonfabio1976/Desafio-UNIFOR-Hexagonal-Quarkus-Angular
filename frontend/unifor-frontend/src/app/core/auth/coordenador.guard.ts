@@ -31,7 +31,6 @@ export class CoordenadorGuard implements CanActivate, CanActivateChild {
     const isCoord = roles.includes('COORDENADOR') || roles.includes('ROLE_COORDENADOR');
     if (isCoord) return true;
 
-    // ALTERAÇÃO: se for admin, manda para admin; senão acesso negado
     const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
     if (isAdmin) return this.router.parseUrl('/admin');
 
